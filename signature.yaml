@@ -1,0 +1,7 @@
+definition: v1alpha
+name: http
+version: v0.0.1
+published:
+  go:
+    name: ""
+    version: ""
