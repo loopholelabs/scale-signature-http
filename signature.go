@@ -113,3 +113,8 @@ func (x *Context) Next() *Context {
 	_ = x.GuestContext().FromReadBuffer()
 	return x
 }
+
+// Generated is not meant to be used directly. It is meant to be used by the Scale Runtime.
+func (x *Context) Generated() *HttpContext {
+	return x.generated
+}
