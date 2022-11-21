@@ -4,12 +4,24 @@
 package http
 
 import (
+	"bytes"
+	_ "embed"
 	"github.com/loopholelabs/polyglot-go"
 	"github.com/loopholelabs/scale/signature"
 	"unsafe"
 )
 
-const VERSION = "v0.1.0"
+//go:embed signature.yaml
+var embeddedSignatureFile []byte
+var signatureFile *signature.Definition
+
+func init() {
+	var err error
+	signatureFile, err = signature.Decode(bytes.NewReader(embeddedSignatureFile))
+	if err != nil {
+		panic(err)
+	}
+}
 
 var _ signature.RuntimeContext = (*RuntimeContext)(nil)
 var _ signature.GuestContext = (*GuestContext)(nil)
@@ -25,7 +37,7 @@ var (
 // inside the Scale function.
 type Context struct {
 	generated *HttpContext
-	buffer *polyglot.Buffer
+	buffer    *polyglot.Buffer
 }
 
 type GuestContext Context
@@ -35,7 +47,7 @@ type RuntimeContext Context
 func New() *Context {
 	return &Context{
 		generated: NewHttpContext(),
-		buffer:      polyglot.NewBuffer(),
+		buffer:    polyglot.NewBuffer(),
 	}
 }
 
@@ -48,7 +60,11 @@ func (x *Context) RuntimeContext() signature.RuntimeContext {
 }
 
 func (x *Context) Version() string {
-	return VERSION
+	return signatureFile.Version
+}
+
+func (x *Context) Name() string {
+	return signatureFile.Name
 }
 
 func (x *Context) Resize(size uint32) uint32 {
