@@ -7,7 +7,7 @@ import (
 	"bytes"
 	_ "embed"
 	"github.com/loopholelabs/polyglot-go"
-	"github.com/loopholelabs/scale/signature"
+	"github.com/loopholelabs/scale-signature"
 	"unsafe"
 )
 
