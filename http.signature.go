@@ -4,8 +4,8 @@
 package http
 
 import (
-	"github.com/loopholelabs/polyglot-go"
 	"errors"
+	"github.com/loopholelabs/polyglot-go"
 )
 
 var (
@@ -52,7 +52,10 @@ func (x *HttpContext) decode(d *polyglot.Decoder) error {
 		return nil
 	}
 
-	var err error
+	err, _ := d.Error()
+	if err != nil {
+		return err
+	}
 	if x.Request == nil {
 		x.Request = NewHttpRequest()
 	}
@@ -151,7 +154,10 @@ func (x *HttpRequest) decode(d *polyglot.Decoder) error {
 		return nil
 	}
 
-	var err error
+	err, _ := d.Error()
+	if err != nil {
+		return err
+	}
 	x.URI, err = d.String()
 	if err != nil {
 		return err
@@ -267,7 +273,10 @@ func (x *HttpResponse) decode(d *polyglot.Decoder) error {
 		return nil
 	}
 
-	var err error
+	err, _ := d.Error()
+	if err != nil {
+		return err
+	}
 	x.StatusCode, err = d.Int32()
 	if err != nil {
 		return err
@@ -328,7 +337,10 @@ func (x *HttpStringList) decode(d *polyglot.Decoder) error {
 		return nil
 	}
 
-	var err error
+	err, _ := d.Error()
+	if err != nil {
+		return err
+	}
 	var sliceSize uint32
 	sliceSize, err = d.Slice(polyglot.StringKind)
 	if err != nil {

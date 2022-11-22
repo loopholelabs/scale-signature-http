@@ -1,7 +1,7 @@
 definition: v1alpha
 name: http
-version: v0.0.5
+version: v0.0.6
 published:
   go:
     name: "github.com/loopholelabs/scale-signature-http"
-    version: "v0.0.5"
+    version: "v0.0.6"
