@@ -92,6 +92,19 @@ func (x *GuestContext) FromReadBuffer() error {
 	return x.generated.internalDecode(readBuffer)
 }
 
+// Error serializes an error into the global writeBuffer and returns a pointer to the buffer and its size
+//
+// This method should only be used to write an error to the Scale Runtime, in place of the ToWriteBuffer method.
+// Users should not use this method.
+func (x *GuestContext) ErrorWriteBuffer(err error) (uint32, uint32) {
+	writeBuffer.Reset()
+	x.generated.error(writeBuffer, err)
+	underlying := writeBuffer.Bytes()
+	ptr := &underlying[0]
+	unsafePtr := uintptr(unsafe.Pointer(ptr))
+	return uint32(unsafePtr), uint32(writeBuffer.Len())
+}
+
 // Read reads the context from the given byte slice and returns an error if one occurred
 //
 // This method is meant to be used by the Scale Runtime to deserialize the Context
@@ -108,10 +121,9 @@ func (x *RuntimeContext) Write() []byte {
 
 // Next calls the next host function after writing the Context into the global writeBuffer,
 // then it reads the result from the global readBuffer back into the Context
-func (x *Context) Next() *Context {
+func (x *Context) Next() (*Context, error) {
 	next(x.GuestContext().ToWriteBuffer())
-	_ = x.GuestContext().FromReadBuffer()
-	return x
+	return x, x.GuestContext().FromReadBuffer()
 }
 
 // Generated is not meant to be used directly. It is meant to be used by the Scale Runtime.
