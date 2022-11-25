@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/loopholelabs/polyglot-go v0.5.1
-	github.com/loopholelabs/scale-signature v0.0.7
+	github.com/loopholelabs/scale-signature v0.0.8
 )
 
 require (
