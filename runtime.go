@@ -73,3 +73,10 @@ func (x *RuntimeContext) Write() []byte {
 	x.generated.internalEncode(x.buffer)
 	return x.buffer.Bytes()
 }
+
+// Error writes the context into a byte slice and returns it
+func (x *RuntimeContext) Error(err error) []byte {
+	x.buffer.Reset()
+	x.generated.error(x.buffer, err)
+	return x.buffer.Bytes()
+}
