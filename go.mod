@@ -8,7 +8,7 @@ require (
 )
 
 require (
-	github.com/loopholelabs/scalefile v0.0.1 // indirect
+	github.com/loopholelabs/scalefile v0.1.0 // indirect
 	github.com/yalue/merged_fs v1.2.2 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
