@@ -7,8 +7,6 @@
 package http
 
 import (
-	"bytes"
-	_ "embed"
 	"github.com/loopholelabs/polyglot-go"
 	"github.com/loopholelabs/scale-signature"
 )
@@ -16,19 +14,7 @@ import (
 var _ signature.Signature = (*Context)(nil)
 var _ signature.RuntimeContext = (*RuntimeContext)(nil)
 
-//go:embed signature.yaml
-var embeddedSignatureFile []byte
-var signatureFile *signature.Definition
-
 type RuntimeContext Context
-
-func init() {
-	var err error
-	signatureFile, err = signature.Decode(bytes.NewReader(embeddedSignatureFile))
-	if err != nil {
-		panic(err)
-	}
-}
 
 // Context is a context object for an incoming request. It is meant to be used
 // inside the Scale function.
@@ -43,16 +29,6 @@ func New() *Context {
 		generated: NewHttpContext(),
 		buffer:    polyglot.NewBuffer(),
 	}
-}
-
-// Version returns the version of the Context
-func (x *Context) Version() string {
-	return signatureFile.Version
-}
-
-// Name returns the name of the Context.
-func (x *Context) Name() string {
-	return signatureFile.Name
 }
 
 // Generated returns the underlying generated context object
