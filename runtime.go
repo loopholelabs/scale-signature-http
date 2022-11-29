@@ -53,7 +53,7 @@ func (x *Context) Generated() *HttpContext {
 }
 
 // RuntimeContext converts a Context into a RuntimeContext.
-func (x *Context) RuntimeContext() signature.RuntimeContext {
+func (x *Context) RuntimeContexts() signature.RuntimeContext {
 	return (*RuntimeContext)(x)
 }
 
