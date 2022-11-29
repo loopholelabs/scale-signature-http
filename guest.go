@@ -83,7 +83,7 @@ func (x *GuestContext) FromReadBuffer() error {
 // Users should not use this method.
 func (x *GuestContext) ErrorWriteBuffer(err error) (uint32, uint32) {
 	writeBuffer.Reset()
-	x.generated.error(writeBuffer, err)
+	x.generated.internalError(writeBuffer, err)
 	underlying := writeBuffer.Bytes()
 	ptr := &underlying[0]
 	unsafePtr := uintptr(unsafe.Pointer(ptr))
