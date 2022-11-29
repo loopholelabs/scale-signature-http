@@ -19,5 +19,8 @@ jobs:
           check-latest: true
           cache: true
 
+      - name: Print `runtime.go`
+        run: cat runtime.go
+
       - name: Test
         run: go test -v ./...
