@@ -182,7 +182,7 @@ func TestSignature(t *testing.T) {
 			scaleFunc := &scalefunc.ScaleFunc{
 				Version:   "TestVersion",
 				Name:      "TestName",
-				Signature: "http@v0.1.0",
+				Signature: "http@v0.1.1",
 				Language:  "go",
 				Function:  module,
 			}
