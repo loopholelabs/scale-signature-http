@@ -47,13 +47,8 @@ func New() *Context {
 	}
 }
 
-// Generated returns the underlying generated context object
-// it's meant to be used with adapters and not used directly.
-func (x *Context) Generated() *HttpContext {
-	return x.generated
-}
-
-// Generated returns the underlying generated context object
+// Generated returns the underlying generated context object.
+// It is meant to be used by adapters and users should not use it.
 func (x *Context) Generated() *HttpContext {
 	return x.generated
 }
