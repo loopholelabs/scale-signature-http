@@ -53,6 +53,11 @@ func (x *Context) Generated() *HttpContext {
 	return x.generated
 }
 
+// Generated returns the underlying generated context object
+func (x *Context) Generated() *HttpContext {
+	return x.generated
+}
+
 // RuntimeContext converts a Context into a RuntimeContext.
 func (x *Context) RuntimeContext() signature.RuntimeContext {
 	return (*RuntimeContext)(x)
