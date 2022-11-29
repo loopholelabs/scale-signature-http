@@ -47,14 +47,14 @@ func New() *Context {
 	}
 }
 
-// Generated returns the underlying generated context object
-func (x *Context) Generated() *HttpContext {
-	return x.generated
-}
-
 // RuntimeContext converts a Context into a RuntimeContext.
 func (x *Context) RuntimeContext() signature.RuntimeContext {
 	return (*RuntimeContext)(x)
+}
+
+// Generated returns the underlying generated context object
+func (x *Context) Generated() *HttpContext {
+	return x.generated
 }
 
 // Read reads the context from the given byte slice and returns an error if one occurred
