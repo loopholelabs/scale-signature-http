@@ -5,3 +5,6 @@ published:
   go:
     name: "github.com/loopholelabs/scale-signature-http"
     version: "v0.1.1"
+  rust:
+    name: "github.com/loopholelabs/scale-signature-http"
+    version: "v0.1.1"
