@@ -15,10 +15,10 @@
 */
 
 #![allow(unused_variables)]
-use super::signature::{Response, StringList};
+use http_signature::{HttpResponse, StringList};
 use std::collections::HashMap;
 
-pub trait MutableResponse {
+pub trait Response {
     fn status_code(&mut self) -> i32;
     fn body(&mut self) -> Vec<u8>;
     fn set_body(&mut self, body: String) -> &mut Self;
@@ -28,7 +28,7 @@ pub trait MutableResponse {
     fn set_headers(&mut self, key: String, value: Vec<String>);
 }
 
-impl MutableResponse for Response {
+impl Response for HttpResponse {
     fn status_code(&mut self) -> i32 {
         self.status_code.clone()
     }

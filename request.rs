@@ -15,11 +15,11 @@
 */
 
 #![allow(unused_variables)]
-use super::signature::{Request, StringList};
+use http_signature::{HttpRequest, StringList};
 use std::string::String;
 use std::collections::HashMap;
 
-pub trait MutableRequest {
+pub trait Request {
     fn method(&mut self) -> String;
     fn set_method(&mut self, method: String) -> &mut Self;
     fn remote_ip(&mut self) -> String;
@@ -31,7 +31,7 @@ pub trait MutableRequest {
     fn set_headers(&mut self, key: String, value: Vec<String>);
 }
 
-impl MutableRequest for Request {
+impl Request for HttpRequest {
     fn method(&mut self) -> String {
         self.method.clone()
     }

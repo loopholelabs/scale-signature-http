@@ -1,23 +1,23 @@
-use http_signature::{Encode, Decode, Context, Request, Response};
+use http_signature::{Encode, Decode, HttpContext, HttpRequest, HttpResponse};
 
-struct RuntimeState {
-    generated: Context,
+struct RuntimeContext {
+    generated: HttpContext,
     buffer: &mut Cursor<&mut Vec<u8>>,
 }
 
-pub trait RuntimeContext {
+pub trait RuntimeCtx {
     fn new(self) -> Self;
-    fn read(&mut self) -> Context;
+    fn read(&mut self) -> HttpContext;
     fn write(&self) -> Vec<u8>;
     fn error(&self, err: std::io::Error) -> Vec<u8>;
-    fn generated(&self) -> &Context;
+    fn generated(&self) -> &HttpContext;
 }
 
-impl RuntimeContext for RuntimeState {
+impl RuntimeCtx for RuntimeContext {
     fn new(self) -> Self {
         RuntimeContext {
-            generated: Context {
-                        request: Request {
+            generated: HttpContext {
+                        request: HttpRequest {
                             headers: HashMap::new(),
                             method: "".to_string(),
                             content_length: 0,
@@ -25,7 +25,7 @@ impl RuntimeContext for RuntimeState {
                             i_p: "".to_string(),
                             body: Vec::new()
                         },
-                        response: Response {
+                        response: HttpResponse {
                             headers: HashMap::new(),
                             status_code: 0,
                             body: Vec::new()
@@ -35,11 +35,11 @@ impl RuntimeContext for RuntimeState {
           buffer: &mut Cursor<&mut Vec<u8>>,
     }
 
-    fn generated(&self) -> &Context {
+    fn generated(&self) -> &HttpContext {
         &self.generated
     }
 
-    fn read(&mut self) -> Context {
+    fn read(&mut self) -> HttpContext {
         Decode::decode(self.buffer).unwrap().unwrap()
     }
 

@@ -13,7 +13,7 @@ use std::sync::Mutex;
 
 use std::io::Cursor;
 use guest::{GuestContext, PTR, LEN, READ_BUFFER};
-use http_signature::Context;
+use http_signature::HttpContext;
 use scale::scale; // mock out for compiler
 use std::mem;
 use std::mem::{MaybeUninit};
@@ -33,7 +33,7 @@ pub unsafe extern "C" fn run() -> u64 {
 
     let mut vec = Vec::from_raw_parts(ptr as *mut u8, len as usize, len as usize);
     let mut constructed = Cursor::new(&mut vec);
-    let context: Context = GuestContext::new();
+    let context: HttpContext = GuestContext::new();
 
     let generated_context = match context.from_read_buffer(&mut constructed) {
       Ok(res) => res,

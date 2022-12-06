@@ -8,7 +8,7 @@ use std::sync::Mutex;
 use std::io::Cursor;
 use std::mem;
 use std::collections::HashMap;
-use http_signature::{Encode, Decode, Context, Request, Response};
+use http_signature::{Encode, Decode, HttpContext, HttpRequest, HttpResponse};
 
 lazy_static! {
     pub static ref PTR: Mutex<u32> = Mutex::new(0);
@@ -22,14 +22,14 @@ pub trait GuestContext {
     fn to_write_buffer(self) -> (u32, u32);
     fn error_write_buffer(self) -> (u32, u32);
     fn next(self) -> Self;
-    fn request(&mut self) -> &mut Request;
-    fn response(&mut self) -> &mut Response;
+    fn request(&mut self) -> &mut HttpRequest;
+    fn response(&mut self) -> &mut HttpResponse;
 }
 
 impl GuestContext for Context {
     fn new()  -> Context {
             Context {
-                    request: Request {
+                    request: HttpRequest {
                         headers: HashMap::new(),
                         method: "".to_string(),
                         content_length: 0,
@@ -37,7 +37,7 @@ impl GuestContext for Context {
                         i_p: "".to_string(),
                         body: Vec::new()
                     },
-                    response: Response {
+                    response: HttpResponse {
                         headers: HashMap::new(),
                         status_code: 0,
                         body: Vec::new()
@@ -79,12 +79,11 @@ impl GuestContext for Context {
         return (ptr, len)
     }
 
-
-    fn request(&mut self) -> &mut Request {
+    fn request(&mut self) -> &mut HttpRequest {
         &mut self.request
     }
 
-    fn response(&mut self) -> &mut Response {
+    fn response(&mut self) -> &mut HttpResponse {
         &mut self.response
     }
 
