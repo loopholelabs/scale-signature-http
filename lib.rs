@@ -4,8 +4,7 @@
 mod guest;
 mod request;
 mod response;
-mod utils;
-//mod scale; // mock out for compiler
+mod scale;
 mod http_signature;
 
 use lazy_static::lazy_static;
@@ -14,7 +13,7 @@ use std::sync::Mutex;
 use std::io::Cursor;
 use guest::{GuestContext, PTR, LEN, READ_BUFFER};
 use http_signature::HttpContext;
-use scale::scale; // mock out for compiler
+use scale::scale;
 use std::mem;
 use std::mem::{MaybeUninit};
 extern crate wee_alloc;
@@ -37,14 +36,22 @@ pub unsafe extern "C" fn run() -> u64 {
 
     let generated_context = match context.from_read_buffer(&mut constructed) {
       Ok(res) => res,
-      Err(err) => return pack_uint32(context.error_write_buffer(err)),
+      Err(err) => {
+          let failing_context: HttpContext = GuestContext::new();
+          let err_ptr_len = failing_context.error_write_buffer(&err.to_string());
+          return pack_uint32(err_ptr_len.0, err_ptr_len.1)
+      }
      };
 
     let ctx = scale(generated_context);
 
     let ptr_len = match ctx.to_write_buffer() {
       Ok(res) => res,
-      Err(err) => return pack_uint32(ctx.error_write_buffer(err)),
+      Err(err) => {
+          let failing_context: HttpContext = GuestContext::new();
+          let err_ptr_len = failing_context.error_write_buffer(&err.to_string());
+          return pack_uint32(err_ptr_len.0, err_ptr_len.1)
+       }
      };
 
     return pack_uint32(ptr_len.0, ptr_len.1);

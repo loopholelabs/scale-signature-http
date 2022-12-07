@@ -15,19 +15,20 @@
 */
 
 #![allow(unused_variables)]
-use http_signature::{HttpRequest, StringList};
+use crate::http_signature::{HttpRequest, HttpStringList};
 use std::string::String;
 use std::collections::HashMap;
 
 pub trait Request {
     fn method(&mut self) -> String;
     fn set_method(&mut self, method: String) -> &mut Self;
+    fn uri(&mut self) -> String;
     fn remote_ip(&mut self) -> String;
     fn body(&mut self) -> Vec<u8>;
     fn set_body(&mut self, body: String) -> &mut Self;
     fn set_body_bytes(&mut self, bytes: Vec<u8>) -> &mut Self;
-    fn headers(&self) -> &HashMap<String, StringList>;
-    fn get_headers(&self, key: &String) -> Option<&StringList>;
+    fn headers(&self) -> &HashMap<String, HttpStringList>;
+    fn get_headers(&self, key: &String) -> Option<&HttpStringList>;
     fn set_headers(&mut self, key: String, value: Vec<String>);
 }
 
@@ -41,8 +42,12 @@ impl Request for HttpRequest {
         self
     }
 
+    fn uri(&mut self) -> String {
+        self.uri.clone()
+    }
+
     fn remote_ip(&mut self) -> String {
-        self.i_p.clone()
+        self.ip.clone()
     }
 
     fn body(&mut self) -> Vec<u8> {
@@ -59,15 +64,15 @@ impl Request for HttpRequest {
         self
     }
 
-    fn headers(&self) -> &HashMap<String, StringList> {
+    fn headers(&self) -> &HashMap<String, HttpStringList> {
         &self.headers
     }
 
-    fn get_headers(&self, key: &String) -> Option<&StringList>{
+    fn get_headers(&self, key: &String) -> Option<&HttpStringList>{
         self.headers.get(key)
     }
 
     fn set_headers(&mut self, key: String, value: Vec<String>) {
-        self.headers.insert(key,  StringList{ value: value });
+        self.headers.insert(key,  HttpStringList{ value: value });
     }
 }

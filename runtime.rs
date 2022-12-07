@@ -1,4 +1,4 @@
-use http_signature::{Encode, Decode, HttpContext, HttpRequest, HttpResponse};
+use crate::http_signature::{Encode, Decode, HttpContext, HttpRequest, HttpResponse};
 
 struct RuntimeContext {
     generated: HttpContext,
@@ -19,10 +19,11 @@ impl RuntimeCtx for RuntimeContext {
             generated: HttpContext {
                         request: HttpRequest {
                             headers: HashMap::new(),
+                            uri: "".to_string(),
                             method: "".to_string(),
                             content_length: 0,
                             protocol: "".to_string(),
-                            i_p: "".to_string(),
+                            ip: "".to_string(),
                             body: Vec::new()
                         },
                         response: HttpResponse {

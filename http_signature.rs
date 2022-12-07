@@ -8,6 +8,7 @@ use std::io::Cursor;
 
 pub trait Encode {
     fn encode(self, b: &mut Cursor<Vec<u8>>) -> Result<&mut Cursor<Vec<u8>>, io::Error>;
+    fn internal_error(self, b: &mut Cursor<Vec<u8>>, error: &str);
 }
 
 pub trait Decode {
@@ -27,6 +28,10 @@ impl Encode for HttpContext {
         self.response.encode(b)?;
         Ok(b)
     }
+
+    fn internal_error(self, b: &mut Cursor<Vec<u8>>, error: &str) {
+        b.encode_error(error).unwrap();
+    }
 }
 
 impl Decode for HttpContext {
@@ -34,6 +39,11 @@ impl Decode for HttpContext {
         if b.decode_none() {
             return Ok(None);
         }
+
+        match b.decode_error() {
+          Ok(res) => res,
+          Err(err) => return Err(err)
+        };
 
         Ok(Some(HttpContext {
             request: HttpRequest::decode(b)?.ok_or(DecodingError::InvalidStruct)?,
@@ -67,6 +77,10 @@ impl Encode for HttpRequest {
             v.encode(b)?;
         }
         Ok(b)
+    }
+
+    fn internal_error(self, b: &mut Cursor<Vec<u8>>, error: &str) {
+        b.encode_error(error).unwrap();
     }
 }
 
@@ -124,6 +138,10 @@ impl Encode for HttpResponse {
         }
         Ok(b)
     }
+
+    fn internal_error(self, b: &mut Cursor<Vec<u8>>, error: &str) {
+        b.encode_error(error).unwrap();
+    }
 }
 
 impl Decode for HttpResponse {
@@ -170,6 +188,10 @@ impl Encode for HttpStringList {
             b.encode_string(&*item)?;
         }
         Ok(b)
+    }
+
+    fn internal_error(self, b: &mut Cursor<Vec<u8>>, error: &str) {
+        b.encode_error(error).unwrap();
     }
 }
 

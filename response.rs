@@ -15,7 +15,7 @@
 */
 
 #![allow(unused_variables)]
-use http_signature::{HttpResponse, StringList};
+use crate::http_signature::{HttpResponse, HttpStringList};
 use std::collections::HashMap;
 
 pub trait Response {
@@ -23,8 +23,8 @@ pub trait Response {
     fn body(&mut self) -> Vec<u8>;
     fn set_body(&mut self, body: String) -> &mut Self;
     fn set_body_bytes(&mut self, bytes: Vec<u8>) -> &mut Self;
-    fn headers(&self) -> &HashMap<String, StringList>;
-    fn get_headers(&self, key: &String) -> Option<&StringList>;
+    fn headers(&self) -> &HashMap<String, HttpStringList>;
+    fn get_headers(&self, key: &String) -> Option<&HttpStringList>;
     fn set_headers(&mut self, key: String, value: Vec<String>);
 }
 
@@ -47,15 +47,15 @@ impl Response for HttpResponse {
         self
     }
 
-    fn headers(&self) -> &HashMap<String, StringList> {
+    fn headers(&self) -> &HashMap<String, HttpStringList> {
         &self.headers
     }
 
-    fn get_headers(&self, key: &String) -> Option<&StringList>{
+    fn get_headers(&self, key: &String) -> Option<&HttpStringList>{
         self.headers.get(key)
     }
 
     fn set_headers(&mut self, key: String, value: Vec<String>) {
-        self.headers.insert(key,  StringList{ value: value });
+        self.headers.insert(key,  HttpStringList{ value: value });
     }
 }
