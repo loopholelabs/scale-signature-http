@@ -40,9 +40,8 @@ impl Decode for HttpContext {
             return Ok(None);
         }
 
-        match b.decode_error() {
-          Ok(res) => res,
-          Err(err) => return Err(err)
+        if let Err(err) = b.decode_error() {
+            return err
         };
 
         Ok(Some(HttpContext {

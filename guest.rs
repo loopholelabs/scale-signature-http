@@ -45,7 +45,9 @@ impl GuestContext for HttpContext {
 
     fn to_write_buffer(self) -> Result<(u32, u32), Error>{
         let mut cursor = Cursor::new(Vec::new());
-        let _ = Encode::encode(self, &mut cursor);
+        if let Err(err) = Encode::encode(self, &mut cursor) {
+            return err
+        }
         let mut vec = cursor.into_inner();
         vec.shrink_to_fit();
 
