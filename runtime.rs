@@ -1,21 +1,14 @@
 use crate::http_signature::{Encode, Decode, HttpContext, HttpRequest, HttpResponse};
+use scale_signature::RuntimeContext;
 
-struct RuntimeContext {
+struct Context {
     generated: HttpContext,
     buffer: &mut Cursor<&mut Vec<u8>>,
 }
 
-pub trait RuntimeCtx {
-    fn new(self) -> Self;
-    fn read(&mut self) -> HttpContext;
-    fn write(&self) -> Vec<u8>;
-    fn error(&self, err: std::io::Error) -> Vec<u8>;
-    fn generated(&self) -> &HttpContext;
-}
-
-impl RuntimeCtx for RuntimeContext {
+impl RuntimeContext for Context {
     fn new(self) -> Self {
-        RuntimeContext {
+        Context {
             generated: HttpContext {
                         request: HttpRequest {
                             headers: HashMap::new(),
