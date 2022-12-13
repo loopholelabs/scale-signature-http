@@ -19,7 +19,7 @@ use crate::http_signature::{HttpResponse, HttpStringList};
 use std::collections::HashMap;
 
 pub trait Response {
-    fn response(&mut self) -> &mut Self;
+    fn response(self) -> Self;
     fn status_code(&mut self) -> i32;
     fn body(&mut self) -> Vec<u8>;
     fn set_body(&mut self, body: String) -> &mut Self;
@@ -30,8 +30,8 @@ pub trait Response {
 }
 
 impl Response for HttpResponse {
-    fn response(&mut self) -> &mut Self {
-        &mut self
+    fn response(self) -> Self {
+        self
     }
 
     fn status_code(&mut self) -> i32 {

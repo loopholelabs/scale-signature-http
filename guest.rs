@@ -10,12 +10,20 @@ use std::io::Cursor;
 use std::mem;
 use std::collections::HashMap;
 use crate::http_signature::{Encode, Decode, HttpContext, HttpRequest, HttpResponse};
-use scale_signature::GuestContext;
+//use scale_signature::GuestContext;
 
 lazy_static! {
     pub static ref PTR: Mutex<u32> = Mutex::new(0);
     pub static ref LEN: Mutex<u32> = Mutex::new(0);
     pub static ref READ_BUFFER: Mutex<Vec<u8>> = Mutex::new(Vec::with_capacity(0));
+}
+
+pub trait GuestContext {
+    fn from_read_buffer(self, read_buff: &mut Cursor<&mut Vec<u8>>) -> Result<HttpContext, Error> ;
+    fn to_write_buffer(self) -> Result<(u32, u32), Error>;
+    fn error_write_buffer(self, error: &str) -> (u32, u32);
+    fn next(self) -> Self;
+    fn new() -> Self;
 }
 
 impl GuestContext for HttpContext {
@@ -46,7 +54,7 @@ impl GuestContext for HttpContext {
     fn to_write_buffer(self) -> Result<(u32, u32), Error>{
         let mut cursor = Cursor::new(Vec::new());
         if let Err(err) = Encode::encode(self, &mut cursor) {
-            return err
+            return Err(err)
         }
         let mut vec = cursor.into_inner();
         vec.shrink_to_fit();

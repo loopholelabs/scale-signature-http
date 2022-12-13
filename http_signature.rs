@@ -41,7 +41,7 @@ impl Decode for HttpContext {
         }
 
         if let Err(err) = b.decode_error() {
-            return err
+            return Err(err)
         };
 
         Ok(Some(HttpContext {

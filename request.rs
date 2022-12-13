@@ -20,7 +20,7 @@ use std::string::String;
 use std::collections::HashMap;
 
 pub trait Request {
-    fn request(&mut self) -> &mut Self;
+    fn request(self) -> Self;
     fn method(&mut self) -> String;
     fn set_method(&mut self, method: String) -> &mut Self;
     fn uri(&mut self) -> String;
@@ -34,8 +34,8 @@ pub trait Request {
 }
 
 impl Request for HttpRequest {
-    fn request(&mut self) -> &mut Self {
-        &mut self
+    fn request(self) -> Self {
+        self
     }
 
     fn method(&mut self) -> String {
