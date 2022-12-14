@@ -2,9 +2,18 @@
 name = "scale_signature_http"
 version = "0.0.1"
 edition = "2021"
+description = "default http signature for Scale Runtime"
+license-file = "LICENSE.md"
+repository = "https://github.com/loopholelabs/scale-signature-http"
+exclude = [
+    "**/*.go",
+    "**/*.templ",
+    "go.mod",
+    "go.sum",
+]
 
 [dependencies]
-polyglot = { git = "https://github.com/loopholelabs/polyglot-rs" }
+polyglot = { git = "https://github.com/loopholelabs/polyglot-rs", rev = "2172da7", version = "0.1.0" }
 scale_signature = "0.0.4"
 lazy_static = "1.4.0"
 wee_alloc = "0.4.5"
