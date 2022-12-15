@@ -19,7 +19,6 @@ lazy_static = "1.4.0"
 wee_alloc = "0.4.5"
 
 [lib]
-crate-type = ["cdylib"]
 path = "lib.rs"
 
 # Below settings dramatically reduce wasm output size
