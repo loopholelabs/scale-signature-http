@@ -1,5 +1,4 @@
 use crate::http_signature::{Encode, Decode, HttpContext, HttpRequest, HttpResponse};
-//use scale_signature::RuntimeContext;
 
 struct Context {
     generated: HttpContext,

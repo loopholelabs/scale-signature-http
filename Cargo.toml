@@ -12,19 +12,11 @@ exclude = [
     "go.sum",
 ]
 
-[dependencies]
-polyglot = { git = "https://github.com/loopholelabs/polyglot-rs", rev = "2172da7", version = "0.1.0" }
-scale_signature = "0.0.4"
-lazy_static = "1.4.0"
-wee_alloc = "0.4.5"
-
 [lib]
 path = "lib.rs"
 
-# Below settings dramatically reduce wasm output size
-# See https://rustwasm.github.io/book/reference/code-size.html#optimizing-builds-for-code-sizewasm-opt -Oz -o
-# See https://doc.rust-lang.org/cargo/reference/profiles.html#codegen-units
-[profile.release]
-opt-level = "z"
-lto = true
-codegen-units = 1
+[dependencies]
+polyglot_rs = "0.1.0"
+scale_signature = "0.0.4"
+lazy_static = "1.4.0"
+wee_alloc = "0.4.5"

@@ -10,7 +10,6 @@ use std::io::Cursor;
 use std::mem;
 use std::collections::HashMap;
 use crate::http_signature::{Encode, Decode, HttpContext, HttpRequest, HttpResponse};
-//use scale_signature::GuestContext;
 
 lazy_static! {
     pub static ref PTR: Mutex<u32> = Mutex::new(0);
