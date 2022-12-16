@@ -16,7 +16,7 @@
 
 /* eslint no-bitwise: off */
 
-import { Context, StringList } from "./generated/generated";
+import { HttpContext as Context, StringList } from "./http.signature";
 
 import { Signature, RuntimeContext } from "@loopholelabs/scale-signature";
 
@@ -53,6 +53,7 @@ export class HttpContext implements Signature, RuntimeContext {
     return encodeError(new Uint8Array(), e);
   }
 
+  // Helper just to show the context
   private static stringHeaders(h: Map<string, StringList>): string {
     let r = "";
     for (let k of h.keys()) {
