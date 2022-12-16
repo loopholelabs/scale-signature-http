@@ -16,7 +16,7 @@
 
 /* eslint no-bitwise: off */
 
-import { HttpContext as Context, StringList } from "./http.signature";
+import { Context, StringList } from "./http.signature";
 
 import { Signature, RuntimeContext } from "@loopholelabs/scale-signature";
 

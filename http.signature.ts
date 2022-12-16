@@ -20,7 +20,7 @@ import { encodeString, decodeString, Kind, encodeArray, decodeArray } from "@loo
 import { Request } from "./request";
 import { Response } from "./response";
 
-export class HttpContext {
+export class Context {
   constructor(Request: Request, Response: Response) {
     this._Request = Request
     this._Response = Response
@@ -55,7 +55,7 @@ export class HttpContext {
 
   static decode(buf: Uint8Array): {
     buf: Uint8Array,
-    value: HttpContext
+    value: Context
   } {
     let decoded = buf
     const Req = Request.decode(decoded)
@@ -64,7 +64,7 @@ export class HttpContext {
     decoded = Resp.buf
     return {
       buf: decoded,
-      value: new HttpContext(Req.value, Resp.value)
+      value: new Context(Req.value, Resp.value)
     }
   }
 }

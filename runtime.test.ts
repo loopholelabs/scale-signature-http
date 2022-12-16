@@ -19,7 +19,7 @@
 
 import { TextEncoder, TextDecoder } from "util";
 import * as fs from "fs";
-import { HttpContext as HContext, StringList } from "./http.signature";
+import { Context as HContext, StringList } from "./http.signature";
 import { Request } from "./request";
 import { Response } from "./response";
 import { WASI } from "wasi";
