@@ -14,7 +14,9 @@
         limitations under the License.
 */
 
-/*
+(window as any).crypto = { getRandomValues: require('polyfill-crypto.getrandomvalues') }
+
+
 import { TextEncoder, TextDecoder } from "util";
 import * as fs from "fs";
 import { HttpContext as HContext, StringList } from "./http.signature";
@@ -25,7 +27,7 @@ import { WASI } from "wasi";
 import { ScaleFunc, V1Alpha, Go } from "@loopholelabs/scalefile";
 import { HttpContext, HttpContextFactory } from "./runtime";
 
-import { Runtime as SigRuntime, WasiContext } from "@loopholelabs/scale";
+import { Runtime as SigRuntime, WasiContext } from "@loopholelabs/scale-ts";
 
 window.TextEncoder = TextEncoder;
 window.TextDecoder = TextDecoder as typeof window["TextDecoder"];
@@ -165,5 +167,3 @@ describe("runtime", () => {
     }
   });
 });
-
-*/
