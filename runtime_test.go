@@ -37,37 +37,37 @@ type TestCase struct {
 func TestSignature(t *testing.T) {
 	passthroughModule := &harness.Module{
 		Name:      "passthrough",
-		Path:      "tests/modules/passthrough/passthrough.go",
+		Path:      "tests/modules/go/passthrough/passthrough.go",
 		Signature: "github.com/loopholelabs/scale-signature-http",
 	}
 
 	nextModule := &harness.Module{
 		Name:      "next",
-		Path:      "tests/modules/next/next.go",
+		Path:      "tests/modules/go/next/next.go",
 		Signature: "github.com/loopholelabs/scale-signature-http",
 	}
 
 	fileModule := &harness.Module{
 		Name:      "file",
-		Path:      "tests/modules/file/file.go",
+		Path:      "tests/modules/go/file/file.go",
 		Signature: "github.com/loopholelabs/scale-signature-http",
 	}
 
 	networkModule := &harness.Module{
 		Name:      "network",
-		Path:      "tests/modules/network/network.go",
+		Path:      "tests/modules/go/network/network.go",
 		Signature: "github.com/loopholelabs/scale-signature-http",
 	}
 
 	panicModule := &harness.Module{
 		Name:      "panic",
-		Path:      "tests/modules/panic/panic.go",
+		Path:      "tests/modules/go/panic/panic.go",
 		Signature: "github.com/loopholelabs/scale-signature-http",
 	}
 
 	modules := []*harness.Module{passthroughModule, nextModule, fileModule, networkModule, panicModule}
 
-	generatedModules := harness.Setup(t, modules, "github.com/loopholelabs/scale-signature-http/tests/modules")
+	generatedModules := harness.Setup(t, modules, "github.com/loopholelabs/scale-signature-http/tests/modules/go")
 
 	var testCases = []TestCase{
 		{
