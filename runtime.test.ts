@@ -47,7 +47,7 @@ function getNewWasi(): WasiContext {
 }
 
 describe("runtime", () => {
-  it("Can run a simple e2e one module", async () => {    
+  it("Can run a simple e2e one module", async () => {
     // Create a context to send in...
     const enc = new TextEncoder();
     const body = enc.encode("Hello world this is a request body");
