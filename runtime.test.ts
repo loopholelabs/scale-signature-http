@@ -14,6 +14,7 @@
         limitations under the License.
 */
 
+/*
 import { TextEncoder, TextDecoder } from "util";
 import * as fs from "fs";
 import { HttpContext as HContext, StringList } from "./http.signature";
@@ -164,3 +165,5 @@ describe("runtime", () => {
     }
   });
 });
+
+*/
