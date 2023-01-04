@@ -17,9 +17,9 @@
 	limitations under the License.
 */
 use std::fs;
-use scale_signature_http::HttpContext as Context;
+use scale_signature_http::http_signature::HttpContext as Context;
 
-fn scale(ctx: &mut Context) -> Result<(), std::io::Error> {
+pub fn scale(ctx: &mut Context) -> Result<(), std::io::Error> {
     fs::read_to_string("tests/modules/rust/file.rs")?;
     Ok(())
 }

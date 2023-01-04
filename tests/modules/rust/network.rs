@@ -17,9 +17,9 @@
 	limitations under the License.
 */
 use std::net::{TcpStream};
-use scale_signature_http::HttpContext as Context;
+use scale_signature_http::http_signature::HttpContext as Context;
 
-fn scale(ctx: &mut Context) -> Result<(), std::io::Error> {
+pub fn scale(ctx: &mut Context) -> Result<(), std::io::Error> {
     let _stream = TcpStream::connect("google.com:80")?;
     Ok(())
 }
