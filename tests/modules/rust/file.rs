@@ -19,7 +19,7 @@
 use std::fs;
 use scale_signature_http::http_signature::HttpContext as Context;
 
-pub fn scale(ctx: &mut Context) -> Result<(), std::io::Error> {
-    fs::read_to_string("tests/modules/rust/file.rs")?;
-    Ok(())
+pub fn scale(ctx: Context) -> Context {
+    fs::read_to_string("tests/modules/rust/file.rs");
+    ctx
 }

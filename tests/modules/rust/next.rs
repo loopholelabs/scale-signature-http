@@ -17,9 +17,10 @@
 	limitations under the License.
 */
 use scale_signature_http::http_signature::HttpContext as Context;
+use scale_signature_http::guest::GuestContext;
 
-pub fn scale(ctx: &mut Context) -> Result<(), std::io::Error> {
-    ctx.next()?;
-    Ok(())
+pub fn scale(ctx: Context) -> Context {
+    ctx.next()
 }
+
 

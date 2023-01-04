@@ -16,9 +16,9 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-use scale_signature_http::HttpContext as Context;
+use scale_signature_http::http_signature::HttpContext as Context;
 
-fn scale(ctx: &mut Context) -> Result<(), std::io::Error> {
-    Ok(())
+pub fn scale(ctx: Context) -> Context {
+    ctx
 }
 
