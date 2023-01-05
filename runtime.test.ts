@@ -22,29 +22,14 @@ import * as fs from "fs";
 import { Context as HContext, StringList } from "./http.signature";
 import { Request } from "./request";
 import { Response } from "./response";
-import { WASI } from "wasi";
 
 import { ScaleFunc, V1Alpha, Go } from "@loopholelabs/scalefile";
-import { HttpContext, HttpContextFactory } from "./runtime";
+import { HttpContextFactory } from "./runtime";
 
-import { Runtime as SigRuntime, WasiContext } from "@loopholelabs/scale-ts";
+import { GetRuntime } from "@loopholelabs/scale-ts";
 
 window.TextEncoder = TextEncoder;
 window.TextDecoder = TextDecoder as typeof window["TextDecoder"];
-
-function getNewWasi(): WasiContext {
-  const wasi = new WASI({
-    args: [],
-    env: {},
-  });
-  const w: WasiContext = {
-    getImportObject: () => wasi.wasiImport,
-    start: (instance: WebAssembly.Instance) => {
-      wasi.start(instance);
-    }
-  }
-  return w;
-}
 
 describe("runtime", () => {
   it("Can run a simple e2e one module", async () => {
@@ -74,8 +59,7 @@ describe("runtime", () => {
 
     const signatureFactory = HttpContextFactory;
 
-    const r = new SigRuntime<HttpContext>(getNewWasi, signatureFactory, [scalefnEndpoint]);
-    await r.Ready;
+    const r = await GetRuntime(signatureFactory, [scalefnEndpoint]);
 
     const i = await r.Instance(null);
     i.Context().ctx = context;
@@ -133,8 +117,7 @@ describe("runtime", () => {
 
     const signatureFactory = HttpContextFactory;
 
-    const r = new SigRuntime<HttpContext>(getNewWasi, signatureFactory, [scalefnMiddle, scalefnEndpoint]);
-    await r.Ready;
+    const r = await GetRuntime(signatureFactory, [scalefnMiddle, scalefnEndpoint]);
 
     const i = await r.Instance(null);
     i.Context().ctx = context;
