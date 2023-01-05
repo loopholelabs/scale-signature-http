@@ -22,14 +22,47 @@ import { Signature, RuntimeContext } from "@loopholelabs/scale-signature";
 
 import { Kind, encodeError, decodeError } from "@loopholelabs/polyglot-ts";
 
+import { Response as HttpResponse } from "./response";
+import { Request as HttpRequest } from "./request";
+
 export function HttpContextFactory(): HttpContext {
   return new HttpContext();
 }
 
+const EmptyBytes = new Uint8Array();
+
 export class HttpContext implements Signature, RuntimeContext {
-  public ctx: undefined | Context;
+  private generated: Context;
 
   constructor() {
+    // Create an empty context
+    const body = EmptyBytes;
+    const headers = new Map<string, StringList>();
+    const req = new HttpRequest(
+      "",
+      BigInt(body.length),
+      "",
+      "",
+      body,
+      headers
+    );
+    const respBody = EmptyBytes;
+    const respHeaders = new Map<string, StringList>();
+    const resp = new HttpResponse(0, respBody, respHeaders);
+
+    this.generated = new Context(req, resp);
+  }
+
+  Request(): HttpRequest {
+    return this.generated.Request;
+  }
+
+  Response(): HttpResponse {
+    return this.generated.Response;
+  }
+
+  Generated(): Context {
+    return this.generated;
   }
 
   RuntimeContext(): RuntimeContext {
@@ -41,12 +74,12 @@ export class HttpContext implements Signature, RuntimeContext {
       const e = decodeError(d).value;
       throw (e);
     }
-    this.ctx = Context.decode(d).value;
+    this.generated = Context.decode(d).value;
   }
 
   Write(): Uint8Array {
-    if (this.ctx === undefined) throw (new Error("ctx undefined"));
-    return this.ctx.encode(new Uint8Array());
+    if (this.generated === undefined) throw (new Error("generated undefined"));
+    return this.generated.encode(new Uint8Array());
   }
 
   Error(e: Error): Uint8Array {
@@ -70,21 +103,17 @@ export class HttpContext implements Signature, RuntimeContext {
   }
 
   public show() {
-    if (this.ctx === undefined) {
-      console.log("== Context undefined ==");
-    } else {
-      const req = this.ctx.Request;
+      const req = this.generated.Request;
       const reqBody = new TextDecoder().decode(req.Body);
       console.log(`== Context ==
     Request method=${req.Method}, proto=${req.Protocol}, ip=${req.IP}, len=${req.ContentLength}
     Headers: ${HttpContext.stringHeaders(req.Headers)}
     Body: ${reqBody}`);
 
-      const resp = this.ctx.Response;
+      const resp = this.generated.Response;
       const respBody = new TextDecoder().decode(resp.Body);
       console.log(`Response code=${resp.StatusCode}
     Headers: ${HttpContext.stringHeaders(resp.Headers)}
     Body: ${respBody}`);
-    }
   }
 }

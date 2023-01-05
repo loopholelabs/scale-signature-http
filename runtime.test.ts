@@ -33,23 +33,6 @@ window.TextDecoder = TextDecoder as typeof window["TextDecoder"];
 
 describe("runtime", () => {
   it("Can run a simple e2e one module", async () => {
-    // Create a context to send in...
-    const enc = new TextEncoder();
-    const body = enc.encode("Hello world this is a request body");
-    const headers = new Map<string, StringList>();
-    headers.set("content", new StringList(["hello"]));
-    const req1 = new Request(
-      "GET",
-      BigInt(100),
-      "https",
-      "1.2.3.4",
-      body,
-      headers
-    );
-    const respBody = enc.encode("Response body");
-    const respHeaders = new Map<string, StringList>();
-    const resp1 = new Response(200, respBody, respHeaders);
-    const context = new HContext(req1, resp1);
 
     const modHttpEndpoint = fs.readFileSync(
       "./example_modules/http-endpoint.wasm"
@@ -62,21 +45,25 @@ describe("runtime", () => {
     const r = await GetRuntime(signatureFactory, [scalefnEndpoint]);
 
     const i = await r.Instance(null);
-    i.Context().ctx = context;
+
+    const enc = new TextEncoder();
+    const body = enc.encode("Hello world this is a request body");
+    i.Context().Request().Method = "GET";
+    i.Context().Request().Body = body;
+    i.Context().Request().ContentLength = BigInt(body.length);
+    i.Context().Request().Headers.set("content", new StringList(["hello"]));
 
     i.Run();
 
-    const retContext = i.Context().ctx;
+    const resp = i.Context().Response();
 
-    expect(retContext).not.toBeNull();
+    expect(resp).not.toBeNull();
 
-    if (retContext != null) {
+    if (resp != null) {
       // check the returns...
 
-      expect(retContext.Response.StatusCode).toBe(200);
-
       const dec = new TextDecoder();
-      const bodyText = dec.decode(retContext.Response.Body);
+      const bodyText = dec.decode(resp.Body);
 
       // The http-endpoint.wasm module copies the request body to the response body.
       expect(bodyText).toBe("Hello world this is a request body");
@@ -84,24 +71,6 @@ describe("runtime", () => {
   });
 
   it("Can run a simple e2e using runtime", async () => {
-
-    // Create a context to send in...
-    const enc = new TextEncoder();
-    const body = enc.encode("Hello world this is a request body");
-    const headers = new Map<string, StringList>();
-    headers.set("content", new StringList(["hello"]));
-    const req1 = new Request(
-      "GET",
-      BigInt(100),
-      "https",
-      "1.2.3.4",
-      body,
-      headers
-    );
-    const respBody = enc.encode("Response body");
-    const respHeaders = new Map<string, StringList>();
-    const resp1 = new Response(200, respBody, respHeaders);
-    const context = new HContext(req1, resp1);
 
     // Now we can use context with a couple of wasm modules...
 
@@ -120,27 +89,31 @@ describe("runtime", () => {
     const r = await GetRuntime(signatureFactory, [scalefnMiddle, scalefnEndpoint]);
 
     const i = await r.Instance(null);
-    i.Context().ctx = context;
+
+    const enc = new TextEncoder();
+    const body = enc.encode("Hello world this is a request body");
+    i.Context().Request().Method = "GET";
+    i.Context().Request().Body = body;
+    i.Context().Request().ContentLength = BigInt(body.length);
+    i.Context().Request().Headers.set("content", new StringList(["hello"]));
 
     i.Run();
 
-    const retContext = i.Context().ctx;
+    const resp = i.Context().Response();
 
-    expect(retContext).not.toBeNull();
+    expect(resp).not.toBeNull();
 
-    if (retContext != null) {
+    if (resp != null) {
       // check the returns...
 
-      expect(retContext.Response.StatusCode).toBe(200);
-
       const dec = new TextDecoder();
-      const bodyText = dec.decode(retContext.Response.Body);
+      const bodyText = dec.decode(resp.Body);
 
       // The http-endpoint.wasm module copies the request body to the response body.
       expect(bodyText).toBe("Hello world this is a request body");
 
       // The http-middleware.wasm adds a header
-      const middle = retContext.Response.Headers.get("MIDDLEWARE");
+      const middle = resp.Headers.get("MIDDLEWARE");
       expect(middle).toBeDefined();
       const vals = middle?.Value;
       if (vals !== undefined) {
