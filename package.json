@@ -16,7 +16,7 @@
     }
   },
   "dependencies": {
-    "@loopholelabs/polyglot-ts": "^0.3.0",
+    "@loopholelabs/polyglot-ts": "^0.4.0",
     "@loopholelabs/scale-signature": "^0.1.2",
     "@loopholelabs/scale-ts": "^0.1.4",
     "@loopholelabs/scalefile": "^0.1.1",
