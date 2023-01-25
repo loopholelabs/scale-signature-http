@@ -40,10 +40,6 @@ impl Decode for HttpContext {
             return Ok(None);
         }
 
-        if let Err(err) = b.decode_error() {
-            return Err(err)
-        };
-
         Ok(Some(HttpContext {
             request: HttpRequest::decode(b)?.ok_or(DecodingError::InvalidStruct)?,
             response: HttpResponse::decode(b)?.ok_or(DecodingError::InvalidStruct)?,
