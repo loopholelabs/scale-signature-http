@@ -22,5 +22,3 @@ use scale_signature_http::guest::GuestContext;
 pub fn scale(ctx: Context) -> Context {
     ctx.next()
 }
-
-

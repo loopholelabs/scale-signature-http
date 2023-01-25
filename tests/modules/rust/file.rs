@@ -18,8 +18,11 @@
 */
 use std::fs;
 use scale_signature_http::http_signature::HttpContext as Context;
+use scale_signature_http::response::Response;
 
 pub fn scale(ctx: Context) -> Context {
-    fs::read_to_string("tests/modules/rust/file.rs");
-    ctx
+    let body = fs::read_to_string("tests/modules/rust/file.rs");
+    let mut ctx1 = ctx;
+    ctx1.response.set_body(body.unwrap());
+    ctx1
 }

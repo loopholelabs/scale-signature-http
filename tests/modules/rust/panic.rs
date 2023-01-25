@@ -21,4 +21,3 @@ use scale_signature_http::http_signature::HttpContext as Context;
 pub fn scale(ctx: Context) -> Context {
     panic!("scale panic");
 }
-

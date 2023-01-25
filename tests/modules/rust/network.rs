@@ -18,9 +18,12 @@
 */
 use std::net::{TcpStream};
 use scale_signature_http::http_signature::HttpContext as Context;
+use scale_signature_http::response::Response;
 
 pub fn scale(ctx: Context) -> Context {
-    let _stream = TcpStream::connect("google.com:80").ok();
-    ctx
+    let stream = TcpStream::connect("google.com:80").ok();
+    let mut ctx1 = ctx;
+    ctx1.response.set_body(stream.unwrap().local_addr().unwrap().ip().to_string());
+    ctx1
 }
 
