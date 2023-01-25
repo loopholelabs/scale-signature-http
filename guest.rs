@@ -14,8 +14,9 @@ use crate::http_signature::{Encode, Decode, HttpContext, HttpRequest, HttpRespon
 lazy_static! {
     pub static ref PTR: Mutex<u32> = Mutex::new(0);
     pub static ref LEN: Mutex<u32> = Mutex::new(0);
-    pub static ref READ_BUFFER: Mutex<Vec<u8>> = Mutex::new(Vec::with_capacity(0));
 }
+
+pub static mut READ_BUFFER: Vec<u8> = Vec::new();
 
 pub trait GuestContext {
     fn from_read_buffer(self, read_buff: &mut Cursor<&mut Vec<u8>>) -> Result<HttpContext, Error> ;
@@ -46,13 +47,12 @@ impl GuestContext for HttpContext {
     }
 
     fn from_read_buffer(self, read_buff: &mut Cursor<&mut Vec<u8>>) -> Result<HttpContext, Error> {
-          let result = Decode::decode(read_buff).unwrap().unwrap();
-          Ok(result)
+          Ok(HttpContext::decode(read_buff).unwrap().ok_or("decoding error").unwrap())
     }
 
     fn to_write_buffer(self) -> Result<(u32, u32), Error>{
         let mut cursor = Cursor::new(Vec::new());
-        if let Err(err) = Encode::encode(self, &mut cursor) {
+        if let Err(err) = HttpContext::encode(self, &mut cursor) {
             return Err(err)
         }
         let mut vec = cursor.into_inner();
@@ -61,7 +61,6 @@ impl GuestContext for HttpContext {
         let ptr = vec.as_ptr() as u32;
         let len = vec.len() as u32;
 
-        *READ_BUFFER.lock().unwrap() = vec;
         return Ok((ptr, len))
     }
 
@@ -75,7 +74,6 @@ impl GuestContext for HttpContext {
         let ptr = vec.as_ptr() as u32;
         let len = vec.len() as u32;
 
-        *READ_BUFFER.lock().unwrap() = vec;
         return (ptr, len)
     }
 
@@ -90,11 +88,11 @@ impl GuestContext for HttpContext {
                let mut vec = Vec::from_raw_parts(ptr as *mut u8, len as usize, len as usize);
                let mut constructed = Cursor::new(&mut vec);
 
-               let empty_context: HttpContext = Self::new();
+               let empty_context: HttpContext = GuestContext::new();
 
                let from_buf = empty_context.from_read_buffer(&mut constructed);
-               return from_buf.unwrap();
-           }
+               return from_buf.unwrap()
+          }
     }
 }
 
