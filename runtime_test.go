@@ -222,7 +222,7 @@ func TestSignature(t *testing.T) {
 				require.NoError(t, err)
 
 				err = i.Run(context.Background())
-				require.Error(t, err)
+				require.NoError(t, err)
 
 				assert.Equal(t, []byte("Test Data"), i.Context().Response().Body())
 			},
@@ -231,7 +231,6 @@ func TestSignature(t *testing.T) {
 			Name:   "Next",
 			Module: nextModuleRust,
 			Run: func(scaleFunc *scalefunc.ScaleFunc, t *testing.T) {
-				t.Skip()
 				next := func(ctx *Context) (*Context, error) {
 					ctx.Response().SetBody("Hello, World!")
 					return ctx, nil
@@ -244,10 +243,9 @@ func TestSignature(t *testing.T) {
 				require.NoError(t, err)
 
 				i.Context().Response().SetBody("Test Data")
-				require.NoError(t, err)
 
 				err = i.Run(context.Background())
-				require.Error(t, err)
+				assert.NoError(t, err)
 
 				assert.Equal(t, []byte("Hello, World!"), i.Context().Response().Body())
 			},
@@ -322,7 +320,7 @@ func TestSignature(t *testing.T) {
 
 			scaleFunc := &scalefunc.ScaleFunc{
 				Version:   "TestVersion",
-				Name:      "TestName",
+				Name:      "GoTestName",
 				Signature: "http@v0.1.1",
 				Language:  "go",
 				Function:  module,
@@ -339,7 +337,7 @@ func TestSignature(t *testing.T) {
 
 			scaleFunc := &scalefunc.ScaleFunc{
 				Version:   "TestVersion",
-				Name:      "TestName",
+				Name:      "RustTestName",
 				Signature: "http@v0.1.1",
 				Language:  "rust",
 				Function:  module,
