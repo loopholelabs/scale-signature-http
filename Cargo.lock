@@ -34,18 +34,18 @@ checksum = "8452105ba047068f40ff7093dd1d9da90898e63dd61736462e9cdda6a90ad3c3"
 
 [[package]]
 name = "polyglot_rs"
-version = "0.1.0"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7ac6f7fd5860381e85ae7e1564a6e609f0dc955e11f9e319ae6c4aa69a0349ac"
+checksum = "7634352e7575b5df5d9b20dcabc2ac2d4c479e8b7c07bc34d1e351d0dba82165"
 dependencies = [
  "byteorder",
 ]
 
 [[package]]
 name = "scale_signature"
-version = "0.1.7"
+version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c637acdb0c5101c85f4bedbfe7ff4d0abd019dd89102e8679373f809e87973ad"
+checksum = "0f8675bce8d317cb7bc738e9270976473fcea274c3fc50b008b160e6b25dd2c7"
 
 [[package]]
 name = "scale_signature_http"
