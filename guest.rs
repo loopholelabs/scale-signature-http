@@ -1,99 +1,84 @@
-#![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
+// #![cfg(target_arch = "wasm32")]
 
-use lazy_static::lazy_static;
-use std::sync::Mutex;
-
-use std::io::Error;
-use std::io::Cursor;
-use std::mem;
-use std::collections::HashMap;
-use crate::http_signature::{Encode, Decode, HttpContext, HttpRequest, HttpResponse};
-
-lazy_static! {
-    pub static ref PTR: Mutex<u32> = Mutex::new(0);
-    pub static ref LEN: Mutex<u32> = Mutex::new(0);
-}
+use crate::context::Context;
+use crate::http_signature::{Decode, Encode, HttpContext};
+use scale_signature::{Context as ContextTrait, GuestContext as GuestContextTrait};
+use std::io::{Cursor, Error, ErrorKind};
 
 pub static mut READ_BUFFER: Vec<u8> = Vec::new();
+pub static mut WRITE_BUFFER: Vec<u8> = Vec::new();
 
-pub trait GuestContext {
-    fn from_read_buffer(self, read_buff: &mut Cursor<&mut Vec<u8>>) -> Result<HttpContext, Error> ;
-    fn to_write_buffer(self) -> Result<(u32, u32), Error>;
-    fn error_write_buffer(self, error: &str) -> (u32, u32);
-    fn next(self) -> Self;
-    fn new() -> Self;
+pub type GuestContext = Context;
+
+impl ContextTrait for Context {
+    fn guest_context(&mut self) -> &mut dyn GuestContextTrait {
+        self
+    }
 }
 
-impl GuestContext for HttpContext {
-    fn new()  -> HttpContext {
-            HttpContext {
-                    request: HttpRequest {
-                        headers: HashMap::new(),
-                        uri: "".to_string(),
-                        method: "".to_string(),
-                        content_length: 0,
-                        protocol: "".to_string(),
-                        ip: "".to_string(),
-                        body: Vec::new()
-                    },
-                    response: HttpResponse {
-                        headers: HashMap::new(),
-                        status_code: 0,
-                        body: Vec::new()
-                    },
-           }
-    }
-
-    fn from_read_buffer(self, read_buff: &mut Cursor<&mut Vec<u8>>) -> Result<HttpContext, Error> {
-          Ok(HttpContext::decode(read_buff).unwrap().ok_or("decoding error").unwrap())
-    }
-
-    fn to_write_buffer(self) -> Result<(u32, u32), Error>{
+impl GuestContextTrait for GuestContext {
+    unsafe fn to_write_buffer(&mut self) -> (u32, u32) {
         let mut cursor = Cursor::new(Vec::new());
-        if let Err(err) = HttpContext::encode(self, &mut cursor) {
-            return Err(err)
+        cursor = match HttpContext::encode(self.generated.clone(), &mut cursor) {
+            Ok(_) => cursor,
+            Err(err) => return self.error_write_buffer(&err.to_string()),
+        };
+
+        let vec = cursor.into_inner();
+
+        let existing_cap = WRITE_BUFFER.capacity() as usize;
+        WRITE_BUFFER.reserve_exact((vec.len() - existing_cap) as usize);
+
+        WRITE_BUFFER.clone_from(&vec);
+        WRITE_BUFFER.shrink_to_fit();
+
+        return (WRITE_BUFFER.as_ptr() as u32, WRITE_BUFFER.len() as u32);
+    }
+
+    unsafe fn error_write_buffer(&mut self, error: &str) -> (u32, u32) {
+        let mut cursor = Cursor::new(Vec::new());
+        Encode::internal_error(self.generated.clone(), &mut cursor, error);
+
+        let vec = cursor.into_inner();
+
+        let existing_cap = WRITE_BUFFER.capacity() as usize;
+        WRITE_BUFFER.reserve_exact((vec.len() - existing_cap) as usize);
+
+        WRITE_BUFFER.clone_from(&vec);
+        WRITE_BUFFER.shrink_to_fit();
+
+        return (WRITE_BUFFER.as_ptr() as u32, WRITE_BUFFER.len() as u32);
+    }
+
+    unsafe fn from_read_buffer(&mut self) -> Option<Error> {
+        let mut cursor = Cursor::new(&mut READ_BUFFER);
+        let result = HttpContext::decode(&mut cursor);
+        return match result {
+            Ok(context) => {
+                self.generated = context.unwrap();
+                None
+            }
+            Err(_) => Some(Error::new(ErrorKind::InvalidInput, "decoding error")),
+        };
+    }
+}
+
+impl Context {
+    pub fn next(&mut self) -> Result<&mut Self, Error> {
+        unsafe {
+            let (ptr, len) = self.to_write_buffer();
+            _next(ptr, len);
+            return match self.from_read_buffer() {
+                Some(err) => Err(err),
+                None => Ok(self),
+            };
         }
-        let mut vec = cursor.into_inner();
-        vec.shrink_to_fit();
-
-        let ptr = vec.as_ptr() as u32;
-        let len = vec.len() as u32;
-
-        return Ok((ptr, len))
     }
+}
 
-    fn error_write_buffer(self, error: &str) -> (u32, u32) {
-
-        let mut b = Cursor::new(Vec::new());
-        Encode::internal_error(self, &mut b, error);
-        let mut vec = b.into_inner();
-        vec.shrink_to_fit();
-
-        let ptr = vec.as_ptr() as u32;
-        let len = vec.len() as u32;
-
-        return (ptr, len)
-    }
-
-    fn next(self) -> Self {
-           let ptr_len = self.to_write_buffer().unwrap();
-           unsafe {
-               //  calls resize from host side, which sets PTR and LEN
-               _next(ptr_len.0, ptr_len.1);
-
-               let ptr = PTR.lock().unwrap().clone();
-               let len = LEN.lock().unwrap().clone();
-               let mut vec = Vec::from_raw_parts(ptr as *mut u8, len as usize, len as usize);
-               let mut constructed = Cursor::new(&mut vec);
-
-               let empty_context: HttpContext = GuestContext::new();
-
-               let from_buf = empty_context.from_read_buffer(&mut constructed);
-               return from_buf.unwrap()
-          }
-    }
+pub unsafe fn resize(size: u32) -> *const u8 {
+    READ_BUFFER.resize(size as usize, 0);
+    return READ_BUFFER.as_ptr();
 }
 
 #[link(wasm_import_module = "env")]

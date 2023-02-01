@@ -17,6 +17,7 @@ pub trait Decode {
         Self: Sized;
 }
 
+#[derive(Clone)]
 pub struct HttpContext {
     pub request: HttpRequest,
     pub response: HttpResponse,
@@ -47,6 +48,7 @@ impl Decode for HttpContext {
     }
 }
 
+#[derive(Clone)]
 pub struct HttpRequest {
     pub headers: HashMap<String, HttpStringList>,
     pub uri: String,
@@ -116,6 +118,7 @@ impl Decode for HttpRequest {
     }
 }
 
+#[derive(Clone)]
 pub struct HttpResponse {
     pub headers: HashMap<String, HttpStringList>,
     pub status_code: i32,
@@ -172,6 +175,7 @@ impl Decode for HttpResponse {
     }
 }
 
+#[derive(Clone)]
 pub struct HttpStringList {
     pub value: Vec<String>,
 }

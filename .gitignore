@@ -3,4 +3,6 @@
 *.bak
 .fleet
 target/
-Cargo.lock
+node_modules
+coverage
+.parcel-cache

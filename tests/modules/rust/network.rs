@@ -1,6 +1,3 @@
-//go:build tinygo || js || wasm
-// +build tinygo js wasm
-
 /*
 	Copyright 2022 Loophole Labs
 
@@ -16,14 +13,13 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-use std::net::{TcpStream};
-use scale_signature_http::http_signature::HttpContext as Context;
-use scale_signature_http::response::Response;
 
-pub fn scale(ctx: Context) -> Context {
+use std::net::{TcpStream};
+use scale_signature_http::context::Context;
+
+pub fn scale(ctx: &mut Context) -> Result<&mut Context, Box<dyn std::error::Error>> {
     let stream = TcpStream::connect("google.com:80").ok();
-    let mut ctx1 = ctx;
-    ctx1.response.set_body(stream.unwrap().local_addr().unwrap().ip().to_string());
-    ctx1
+    ctx.response().set_body(stream.unwrap().local_addr().unwrap().ip().to_string());
+    Ok(ctx)
 }
 

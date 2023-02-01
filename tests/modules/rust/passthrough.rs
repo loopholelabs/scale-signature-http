@@ -1,6 +1,3 @@
-//go:build tinygo || js || wasm
-// +build tinygo js wasm
-
 /*
 	Copyright 2022 Loophole Labs
 
@@ -16,6 +13,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 use scale_signature_http::http_signature::HttpContext as Context;
 
 pub fn scale(ctx: Context) -> Context {

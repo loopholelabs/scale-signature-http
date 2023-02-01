@@ -38,7 +38,7 @@ describe("runtime", () => {
       "./example_modules/http-endpoint.wasm"
     );
 
-    const scalefnEndpoint = new ScaleFunc(V1Alpha, "Test.HttpEndpoint", "ExampleName@ExampleVersion", Go, [], modHttpEndpoint);
+    const scalefnEndpoint = new ScaleFunc(V1Alpha, "Test.HttpEndpoint", "Test.Tag", "ExampleName@ExampleVersion", Go, modHttpEndpoint);
 
     const signatureFactory = HttpContextFactory;
 

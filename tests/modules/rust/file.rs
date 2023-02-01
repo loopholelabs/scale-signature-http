@@ -1,6 +1,3 @@
-//go:build tinygo || js || wasm
-// +build tinygo js wasm
-
 /*
 	Copyright 2022 Loophole Labs
 

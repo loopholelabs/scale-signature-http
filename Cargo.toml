@@ -1,6 +1,6 @@
 [package]
 name = "scale_signature_http"
-version = "0.0.4"
+version = "0.1.6"
 edition = "2021"
 description = "default http signature for Scale Runtime"
 license-file = "LICENSE.md"
@@ -17,6 +17,6 @@ path = "lib.rs"
 
 [dependencies]
 polyglot_rs = "0.1.0"
-scale_signature = "0.0.4"
+scale_signature = "0.1.7"
 lazy_static = "1.4.0"
 wee_alloc = "0.4.5"
