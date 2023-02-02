@@ -44,8 +44,8 @@ export class Context extends HttpContext implements Signature {
 export class RuntimeContext implements RuntimeContextInterface {
     private readonly context: HttpContext;
 
-    constructor(generated: HttpContext) {
-        this.context = generated;
+    constructor(context: HttpContext) {
+        this.context = context;
     }
 
     Read(b: Uint8Array): Error | undefined {
