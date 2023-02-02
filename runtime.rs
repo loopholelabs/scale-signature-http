@@ -23,12 +23,6 @@ use std::io::Cursor;
 
 pub type RuntimeContext = Context;
 
-impl Context {
-    pub fn generated(&self) -> &HttpContext {
-        &self.generated
-    }
-}
-
 impl SignatureTrait for Context {
     fn runtime_context(&mut self) -> &mut dyn RuntimeContextTrait {
         self
@@ -41,7 +35,7 @@ impl RuntimeContextTrait for RuntimeContext {
         let result = HttpContext::decode(&mut cursor);
         return match result {
             Ok(context) => {
-                self.generated = context.unwrap();
+                *self = context.unwrap();
                 None
             }
             Err(err) => Some(err),
@@ -50,13 +44,13 @@ impl RuntimeContextTrait for RuntimeContext {
 
     fn write(&self) -> Vec<u8> {
         let mut cursor = Cursor::new(Vec::new());
-        let _ = Encode::encode(self.generated.clone(), &mut cursor);
+        let _ = Encode::encode(self.clone(), &mut cursor);
         cursor.into_inner()
     }
 
     fn error(&self, error: Box<dyn std::error::Error>) -> Vec<u8> {
         let mut cursor = Cursor::new(Vec::new());
-        Encode::internal_error(self.generated.clone(), &mut cursor, error);
+        Encode::internal_error(self.clone(), &mut cursor, error);
         cursor.into_inner()
     }
 }
