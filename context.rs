@@ -1,3 +1,19 @@
+/*
+	Copyright 2022 Loophole Labs
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		   http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+*/
+
 use crate::http_signature::{HttpContext, HttpRequest, HttpResponse};
 use crate::request::Request;
 use crate::response::Response;
@@ -25,15 +41,5 @@ pub fn new() -> Context {
                 body: Vec::new(),
             },
         },
-    }
-}
-
-impl Context {
-    pub fn request(&mut self) -> &mut Request {
-        &mut self.generated.request as &mut Request
-    }
-
-    pub fn response(&mut self) -> &mut Response {
-        &mut self.generated.response as &mut Response
     }
 }

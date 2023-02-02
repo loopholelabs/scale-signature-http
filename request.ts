@@ -61,6 +61,10 @@ export class Request {
     return this.request.IP;
   }
 
+  public Protocol() : string {
+    return this.request.Protocol;
+  }
+
   public Headers() : Map<string, StringList> {
     return this.request.Headers;
   }
