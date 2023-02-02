@@ -31,22 +31,16 @@ type RuntimeContext Context
 // Context is a context object for an incoming request. It is meant to be used
 // inside the Scale function.
 type Context struct {
-	generated *HttpContext
-	buffer    *polyglot.Buffer
+	*HttpContext
+	buffer *polyglot.Buffer
 }
 
 // New creates a new empty Context
 func New() *Context {
 	return &Context{
-		generated: NewHttpContext(),
-		buffer:    polyglot.NewBuffer(),
+		HttpContext: NewHttpContext(),
+		buffer:      polyglot.NewBuffer(),
 	}
-}
-
-// Generated returns the underlying generated context object.
-// It is meant to be used by adapters and users should not use it.
-func (x *Context) Generated() *HttpContext {
-	return x.generated
 }
 
 // RuntimeContext converts a Context into a RuntimeContext.
@@ -58,19 +52,19 @@ func (x *Context) RuntimeContext() signature.RuntimeContext {
 //
 // This method is meant to be used by the Scale Runtime to deserialize the Context
 func (x *RuntimeContext) Read(b []byte) error {
-	return x.generated.internalDecode(b)
+	return x.internalDecode(b)
 }
 
 // Write writes the context into a byte slice and returns it
 func (x *RuntimeContext) Write() []byte {
 	x.buffer.Reset()
-	x.generated.internalEncode(x.buffer)
+	x.internalEncode(x.buffer)
 	return x.buffer.Bytes()
 }
 
 // Error writes the context into a byte slice and returns it
 func (x *RuntimeContext) Error(err error) []byte {
 	x.buffer.Reset()
-	x.generated.internalError(x.buffer, err)
+	x.internalError(x.buffer, err)
 	return x.buffer.Bytes()
 }

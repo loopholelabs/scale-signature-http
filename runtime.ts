@@ -28,14 +28,12 @@ export function New(): Context {
     return new Context();
 }
 
-export class Context implements Signature {
-    private readonly generated = new HttpContext(new HttpRequest("", "", BigInt(0), "", "", EmptyBytes, new Map<string, StringList>()), new HttpResponse(0, EmptyBytes, new Map<string, StringList>()));
-    private readonly runtimeContext = new RuntimeContext(this.generated);
+export class Context extends HttpContext implements Signature {
+    private readonly runtimeContext: RuntimeContext;
 
-   constructor() {}
-
-   Generated(): HttpContext {
-     return this.generated;
+   constructor() {
+        super(new HttpRequest("", "", BigInt(0), "", "", EmptyBytes, new Map<string, StringList>()), new HttpResponse(0, EmptyBytes, new Map<string, StringList>()));
+        this.runtimeContext = new RuntimeContext(this);
    }
 
    RuntimeContext(): RuntimeContext {
