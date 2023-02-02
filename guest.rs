@@ -18,6 +18,8 @@
 
 use crate::context::Context;
 use crate::http_signature::{Decode, Encode, HttpContext};
+use crate::request::Request;
+use crate::response::Response;
 use scale_signature::{Context as ContextTrait, GuestContext as GuestContextTrait};
 use std::io::Cursor;
 

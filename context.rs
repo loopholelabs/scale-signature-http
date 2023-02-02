@@ -15,8 +15,6 @@
 */
 
 use crate::http_signature::{HttpContext, HttpRequest, HttpResponse};
-use crate::request::Request;
-use crate::response::Response;
 use std::collections::HashMap;
 
 pub struct Context {
