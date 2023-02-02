@@ -18,8 +18,8 @@ pub trait Decode {
 
 #[derive(Clone)]
 pub struct HttpContext {
-    pub request: HttpRequest,
-    pub response: HttpResponse,
+    pub(crate) request: HttpRequest,
+    pub(crate) response: HttpResponse,
 }
 
 impl Encode for HttpContext {
@@ -55,13 +55,13 @@ impl Decode for HttpContext {
 
 #[derive(Clone)]
 pub struct HttpRequest {
-    pub headers: HashMap<String, HttpStringList>,
-    pub uri: String,
-    pub method: String,
-    pub content_length: i64,
-    pub protocol: String,
-    pub ip: String,
-    pub body: Vec<u8>,
+    pub(crate) headers: HashMap<String, HttpStringList>,
+    pub(crate) uri: String,
+    pub(crate) method: String,
+    pub(crate) content_length: i64,
+    pub(crate) protocol: String,
+    pub(crate) ip: String,
+    pub(crate) body: Vec<u8>,
 }
 
 impl Encode for HttpRequest {
@@ -131,9 +131,9 @@ impl Decode for HttpRequest {
 
 #[derive(Clone)]
 pub struct HttpResponse {
-    pub headers: HashMap<String, HttpStringList>,
-    pub status_code: i32,
-    pub body: Vec<u8>,
+    pub(crate) headers: HashMap<String, HttpStringList>,
+    pub(crate) status_code: i32,
+    pub(crate) body: Vec<u8>,
 }
 
 impl Encode for HttpResponse {
