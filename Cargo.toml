@@ -1,0 +1,22 @@
+[package]
+name = "scale_signature_http"
+version = "0.1.5"
+edition = "2021"
+description = "default http signature for Scale Runtime"
+license-file = "LICENSE.md"
+repository = "https://github.com/loopholelabs/scale-signature-http"
+exclude = [
+    "**/*.go",
+    "**/*.templ",
+    "go.mod",
+    "go.sum",
+]
+
+[lib]
+path = "lib.rs"
+
+[dependencies]
+polyglot_rs = "0.6.0"
+scale_signature = "0.2.0"
+lazy_static = "1.4.0"
+wee_alloc = "0.4.5"

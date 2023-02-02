@@ -97,7 +97,7 @@ func NewHttpRequestHeadersMap(size uint32) map[string]*HttpStringList {
 
 func (x HttpRequestHeadersMap) internalEncode(b *polyglot.Buffer) {
 	if x == nil {
-		polyglot.Encoder(b).Nil()
+		polyglot.Encoder(b).Map(0, polyglot.StringKind, polyglot.AnyKind)
 	} else {
 		polyglot.Encoder(b).Map(uint32(len(x)), polyglot.StringKind, polyglot.AnyKind)
 		for k, v := range x {
@@ -220,7 +220,7 @@ func NewHttpResponseHeadersMap(size uint32) map[string]*HttpStringList {
 
 func (x HttpResponseHeadersMap) internalEncode(b *polyglot.Buffer) {
 	if x == nil {
-		polyglot.Encoder(b).Nil()
+		polyglot.Encoder(b).Map(0, polyglot.StringKind, polyglot.AnyKind)
 	} else {
 		polyglot.Encoder(b).Map(uint32(len(x)), polyglot.StringKind, polyglot.AnyKind)
 		for k, v := range x {

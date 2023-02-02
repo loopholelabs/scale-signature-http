@@ -43,7 +43,7 @@ func (res *Response) Body() []byte {
 
 // SetBody sets the body of the response
 func (res *Response) SetBody(body string) {
-	res.value.Body = []byte(body)
+	res.SetBodyBytes([]byte(body))
 }
 
 // SetBodyBytes sets the body of the response in bytes
