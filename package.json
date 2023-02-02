@@ -1,6 +1,6 @@
 {
   "name": "@loopholelabs/scale-signature-http",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "TypeScript version of the scale-signature-http.",
   "source": "index.ts",
   "main": "dist/main.js",
