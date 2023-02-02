@@ -22,76 +22,47 @@ import {RuntimeContext as RuntimeContextInterface, Signature} from "@loopholelab
 
 import {decodeError, Kind} from "@loopholelabs/polyglot-ts";
 
-import {Response} from "./response";
-import {Request} from "./request";
-
 const EmptyBytes = new Uint8Array();
 
+export function New(): Context {
+    return new Context();
+}
+
+export class Context implements Signature {
+    private readonly generated = new HttpContext(new HttpRequest("", "", BigInt(0), "", "", EmptyBytes, new Map<string, StringList>()), new HttpResponse(0, EmptyBytes, new Map<string, StringList>()));
+    private readonly runtimeContext = new RuntimeContext(this.generated);
+
+   constructor() {}
+
+   Generated(): HttpContext {
+     return this.generated;
+   }
+
+   RuntimeContext(): RuntimeContext {
+     return this.runtimeContext;
+   }
+}
+
 export class RuntimeContext implements RuntimeContextInterface {
-    private generated: HttpContext;
+    private readonly context: HttpContext;
 
     constructor(generated: HttpContext) {
-        this.generated = generated;
+        this.context = generated;
     }
 
     Read(b: Uint8Array): Error | undefined {
         if (b.length > 0 && b[0] === Kind.Error) {
             return decodeError(b).value;
         }
-        this.generated = HttpContext.decode(b).value;
+        Object.assign(this.context, HttpContext.decode(b).value);
         return undefined;
     }
 
     Write(): Uint8Array {
-        return this.generated.encode(new Uint8Array());
+        return this.context.encode(new Uint8Array());
     }
 
     Error(err: Error): Uint8Array {
-        return this.generated.internalError(new Uint8Array(), err);
+        return this.context.internalError(new Uint8Array(), err);
     }
-}
-
-export class Context implements Signature {
-  private readonly generated: HttpContext;
-  private readonly request: Request;
-  private readonly response: Response;
-  private readonly runtimeContext: RuntimeContext;
-
-  constructor() {
-    const reqBody = EmptyBytes;
-    const reqHeaders = new Map<string, StringList>();
-    const req = new HttpRequest(
-      "",
-      "",
-      BigInt(reqBody.length),
-      "",
-      "",
-      reqBody,
-      reqHeaders
-    );
-    const respBody = EmptyBytes;
-    const respHeaders = new Map<string, StringList>();
-    const resp = new HttpResponse(0, respBody, respHeaders);
-
-    this.generated = new HttpContext(req, resp);
-    this.request = new Request(this.generated.Request);
-    this.response = new Response(this.generated.Response);
-    this.runtimeContext = new RuntimeContext(this.generated);
-  }
-
-  Request(): Request {
-    return this.request;
-  }
-
-  Response(): Response {
-    return this.response;
-  }
-
-  Generated(): HttpContext {
-    return this.generated;
-  }
-
-  RuntimeContext(): RuntimeContext {
-    return this.runtimeContext;
-  }
 }

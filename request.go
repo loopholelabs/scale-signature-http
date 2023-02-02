@@ -21,11 +21,6 @@ type Request struct {
 	value *HttpRequest
 }
 
-// Request returns the Request object for the Context
-func (x *Context) Request() *Request {
-	return &Request{value: x.generated.Request}
-}
-
 // Method returns the method of the request
 func (req *Request) Method() string {
 	return req.value.Method

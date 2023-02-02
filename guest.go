@@ -93,6 +93,16 @@ func (x *Context) Next() (*Context, error) {
 	return x, x.GuestContext().FromReadBuffer()
 }
 
+// Request returns the Request object for the Context
+func (x *Context) Request() *Request {
+	return &Request{value: x.generated.Request}
+}
+
+// Response returns the Response object for the Context
+func (x *Context) Response() *Response {
+	return &Response{value: x.generated.Response}
+}
+
 func Resize(size uint32) uint32 {
 	if uint32(cap(readBuffer)) < size {
 		readBuffer = append(make([]byte, 0, uint32(len(readBuffer))+size), readBuffer...)

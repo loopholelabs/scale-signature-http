@@ -21,11 +21,6 @@ type Response struct {
 	value *HttpResponse
 }
 
-// Response returns the Response object for the Context
-func (x *Context) Response() *Response {
-	return &Response{value: x.generated.Response}
-}
-
 // StatusCode returns the status code of the response
 func (res *Response) StatusCode() int32 {
 	return res.value.StatusCode
