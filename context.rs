@@ -1,4 +1,6 @@
 use crate::http_signature::{HttpContext, HttpRequest, HttpResponse};
+use crate::request::Request;
+use crate::response::Response;
 use std::collections::HashMap;
 
 #[cfg(target_arch = "wasm32")]
@@ -54,5 +56,15 @@ pub fn new() -> Context {
             },
         },
         buffer: Vec::new(),
+    }
+}
+
+impl Context {
+    pub fn request(&mut self) -> &mut Request {
+        &mut self.generated.request as &mut Request
+    }
+
+    pub fn response(&mut self) -> &mut Response {
+        &mut self.generated.response as &mut Response
     }
 }

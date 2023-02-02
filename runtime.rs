@@ -3,7 +3,7 @@
 use crate::context::Context;
 use crate::http_signature::{Decode, Encode, HttpContext};
 use scale_signature::{RuntimeContext as RuntimeContextTrait, Signature as SignatureTrait};
-use std::io::{Cursor, Error, ErrorKind};
+use std::io::Cursor;
 
 pub type RuntimeContext = Context;
 
@@ -14,7 +14,7 @@ impl SignatureTrait for Context {
 }
 
 impl RuntimeContextTrait for RuntimeContext {
-    fn read(&mut self) -> Option<Error> {
+    fn read(&mut self) -> Option<Box<dyn std::error::Error>> {
         let mut cursor = Cursor::new(&mut self.buffer);
         let result = HttpContext::decode(&mut cursor);
         return match result {
@@ -22,7 +22,7 @@ impl RuntimeContextTrait for RuntimeContext {
                 self.generated = context.unwrap();
                 None
             }
-            Err(_) => Some(Error::new(ErrorKind::InvalidInput, "decoding error")),
+            Err(err) => Some(err),
         };
     }
 
@@ -32,7 +32,7 @@ impl RuntimeContextTrait for RuntimeContext {
         cursor.into_inner()
     }
 
-    fn error(&self, error: &str) -> Vec<u8> {
+    fn error(&self, error: Box<dyn std::error::Error>) -> Vec<u8> {
         let mut cursor = Cursor::new(Vec::new());
         Encode::internal_error(self.generated.clone(), &mut cursor, error);
         cursor.into_inner()

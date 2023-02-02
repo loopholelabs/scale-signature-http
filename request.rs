@@ -14,71 +14,66 @@
     limitations under the License.
 */
 
-#![allow(unused_variables)]
-use crate::context::Context;
-use crate::http_signature::{HttpStringList};
+use crate::http_signature::{HttpRequest, HttpStringList};
 use std::collections::HashMap;
 use std::string::String;
 
-pub trait Request {
-    fn request(self) -> Self;
-    fn method(&mut self) -> String;
-    fn set_method(&mut self, method: String) -> &mut Self;
-    fn uri(&mut self) -> String;
-    fn remote_ip(&mut self) -> String;
-    fn body(&mut self) -> Vec<u8>;
-    fn set_body(&mut self, body: String) -> &mut Self;
-    fn set_body_bytes(&mut self, bytes: Vec<u8>) -> &mut Self;
-    fn headers(&self) -> &HashMap<String, HttpStringList>;
-    fn get_headers(&self, key: &String) -> Option<&HttpStringList>;
-    fn set_headers(&mut self, key: String, value: Vec<String>);
-}
+pub type Request = HttpRequest;
 
-impl Request for Context {
-    fn request(self) -> Self {
+impl Request {
+    pub fn method(&mut self) -> String {
+        self.method.clone()
+    }
+
+    pub fn set_method(&mut self, method: String) -> &mut Self {
+        self.method = method;
         self
     }
 
-    fn method(&mut self) -> String {
-        self.generated.request.method.clone()
+    pub fn uri(&mut self) -> String {
+        self.uri.clone()
     }
 
-    fn set_method(&mut self, method: String) -> &mut Self {
-        self.generated.request.method = method;
+    pub fn set_uri(&mut self, uri: String) -> &mut Self {
+        self.uri = uri;
         self
     }
 
-    fn uri(&mut self) -> String {
-        self.generated.request.uri.clone()
+    pub fn body(&mut self) -> Vec<u8> {
+        self.body.clone()
     }
 
-    fn remote_ip(&mut self) -> String {
-        self.generated.request.ip.clone()
+    pub fn set_body(&mut self, body: String) -> &mut Self {
+        return self.set_body_bytes(body.as_bytes().to_vec());
     }
 
-    fn body(&mut self) -> Vec<u8> {
-        self.generated.request.body.clone()
-    }
-
-    fn set_body(&mut self, body: String) -> &mut Self {
-        self.generated.request.body = body.as_bytes().to_vec();
+    pub fn set_body_bytes(&mut self, bytes: Vec<u8>) -> &mut Self {
+        self.body = bytes;
+        self.content_length = self.body.len() as i64;
         self
     }
 
-    fn set_body_bytes(&mut self, bytes: Vec<u8>) -> &mut Self {
-        self.generated.request.body = bytes;
-        self
+    pub fn content_length(&mut self) -> i64 {
+        self.content_length
     }
 
-    fn headers(&self) -> &HashMap<String, HttpStringList> {
-        &self.generated.request.headers
+    pub fn remote_ip(&mut self) -> String {
+        self.ip.clone()
     }
 
-    fn get_headers(&self, key: &String) -> Option<&HttpStringList> {
-        self.generated.request.headers.get(key)
+    pub fn protocol(&mut self) -> String {
+        self.protocol.clone()
     }
 
-    fn set_headers(&mut self, key: String, value: Vec<String>) {
-        self.generated.request.headers.insert(key, HttpStringList { value });
+    pub fn headers(&self) -> &HashMap<String, HttpStringList> {
+        &self.headers
+    }
+
+    pub fn get_headers(&self, key: &String) -> Option<&HttpStringList> {
+        self.headers.get(key)
+    }
+
+    pub fn set_headers(&mut self, key: String, value: Vec<String>) {
+        self.headers.insert(key, HttpStringList { value });
     }
 }

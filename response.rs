@@ -14,47 +14,39 @@
     limitations under the License.
 */
 
-#![allow(unused_variables)]
-use crate::context::Context;
-use crate::http_signature::{HttpStringList};
+use crate::http_signature::{HttpResponse, HttpStringList};
 use std::collections::HashMap;
 
-type Response = Context;
-
-impl Context {
-    pub fn response(&mut self) -> &mut Response {
-        self as &mut Response
-    }
-}
+pub type Response = HttpResponse;
 
 impl Response {
     pub fn status_code(&mut self) -> i32 {
-        self.generated.response.status_code.clone()
+        self.status_code.clone()
     }
 
     pub fn body(&mut self) -> Vec<u8> {
-        self.generated.response.body.clone()
+        self.body.clone()
     }
 
     pub fn set_body(&mut self, body: String) -> &mut Self {
-        self.generated.response.body = body.as_bytes().to_vec();
+        self.body = body.as_bytes().to_vec();
         self
     }
 
     pub fn set_body_bytes(&mut self, bytes: Vec<u8>) -> &mut Self {
-        self.generated.response.body = bytes;
+        self.body = bytes;
         self
     }
 
     pub fn headers(&self) -> &HashMap<String, HttpStringList> {
-        &self.generated.response.headers
+        &self.headers
     }
 
     pub fn get_headers(&self, key: &String) -> Option<&HttpStringList> {
-        self.generated.response.headers.get(key)
+        self.headers.get(key)
     }
 
     pub fn set_headers(&mut self, key: String, value: Vec<String>) {
-        self.generated.response.headers.insert(key, HttpStringList { value });
+        self.headers.insert(key, HttpStringList { value });
     }
 }
