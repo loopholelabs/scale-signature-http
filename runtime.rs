@@ -14,8 +14,8 @@ impl SignatureTrait for Context {
 }
 
 impl RuntimeContextTrait for RuntimeContext {
-    fn read(&mut self) -> Option<Box<dyn std::error::Error>> {
-        let mut cursor = Cursor::new(&mut self.buffer);
+    fn read(&mut self, b: &mut Vec<u8>) -> Option<Box<dyn std::error::Error>> {
+        let mut cursor = Cursor::new(b);
         let result = HttpContext::decode(&mut cursor);
         return match result {
             Ok(context) => {

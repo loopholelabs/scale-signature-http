@@ -16,104 +16,82 @@
 
 /* eslint no-bitwise: off */
 
-import { Context, StringList } from "./http.signature";
+import {HttpContext, HttpRequest, HttpResponse, StringList} from "./http.signature";
 
-import { Signature, RuntimeContext } from "@loopholelabs/scale-signature";
+import {RuntimeContext as RuntimeContextInterface, Signature} from "@loopholelabs/scale-signature";
 
-import { Kind, encodeError, decodeError } from "@loopholelabs/polyglot-ts";
+import {decodeError, Kind} from "@loopholelabs/polyglot-ts";
 
-import { Response as HttpResponse } from "./response";
-import { Request as HttpRequest } from "./request";
-
-export function HttpContextFactory(): HttpContext {
-  return new HttpContext();
-}
+import {Response} from "./response";
+import {Request} from "./request";
 
 const EmptyBytes = new Uint8Array();
 
-export class HttpContext implements Signature, RuntimeContext {
-  private generated: Context;
+export class RuntimeContext implements RuntimeContextInterface {
+    private generated: HttpContext;
+
+    constructor(generated: HttpContext) {
+        this.generated = generated;
+    }
+
+    Read(b: Uint8Array): Error | undefined {
+        if (b.length > 0 && b[0] === Kind.Error) {
+            return decodeError(b).value;
+        }
+        this.generated = HttpContext.decode(b).value;
+        return undefined;
+    }
+
+    Write(): Uint8Array {
+        return this.generated.encode(new Uint8Array());
+    }
+
+    Error(err: Error): Uint8Array {
+        return this.generated.internalError(new Uint8Array(), err);
+    }
+}
+
+export class Context implements Signature {
+  private readonly generated: HttpContext;
+  private readonly request: Request;
+  private readonly response: Response;
+  private readonly runtimeContext: RuntimeContext;
 
   constructor() {
-    // Create an empty context
-    const body = EmptyBytes;
-    const headers = new Map<string, StringList>();
+    const reqBody = EmptyBytes;
+    const reqHeaders = new Map<string, StringList>();
     const req = new HttpRequest(
       "",
-      BigInt(body.length),
+      "",
+      BigInt(reqBody.length),
       "",
       "",
-      body,
-      headers
+      reqBody,
+      reqHeaders
     );
     const respBody = EmptyBytes;
     const respHeaders = new Map<string, StringList>();
     const resp = new HttpResponse(0, respBody, respHeaders);
 
-    this.generated = new Context(req, resp);
+    this.generated = new HttpContext(req, resp);
+    this.request = new Request(this.generated.Request);
+    this.response = new Response(this.generated.Response);
+    this.runtimeContext = new RuntimeContext(this.generated);
   }
 
-  Request(): HttpRequest {
-    return this.generated.Request;
+  Request(): Request {
+    return this.request;
   }
 
-  Response(): HttpResponse {
-    return this.generated.Response;
+  Response(): Response {
+    return this.response;
   }
 
-  Generated(): Context {
+  Generated(): HttpContext {
     return this.generated;
   }
 
   RuntimeContext(): RuntimeContext {
-    return this;
-  }
-
-  Read(d: Uint8Array) {
-    if (d.length > 0 && d[0] === Kind.Error) {
-      const e = decodeError(d).value;
-      throw (e);
-    }
-    this.generated = Context.decode(d).value;
-  }
-
-  Write(): Uint8Array {
-    if (this.generated === undefined) throw (new Error("generated undefined"));
-    return this.generated.encode(new Uint8Array());
-  }
-
-  Error(e: Error): Uint8Array {
-    return encodeError(new Uint8Array(), e);
-  }
-
-  // Helper just to show the context
-  private static stringHeaders(h: Map<string, StringList>): string {
-    let r = "";
-    for (let k of h.keys()) {
-      let values = h.get(k);
-      if (values != undefined) {
-        for (let i of values.Value.values()) {
-          r = r + " " + k + "=" + i;
-        }
-      } else {
-        r = r + " " + k;
-      }
-    }
-    return r;
-  }
-
-  public show() {
-      const req = this.generated.Request;
-      const reqBody = new TextDecoder().decode(req.Body);
-      console.log(`== Context ==
-    Request method=${req.Method}, proto=${req.Protocol}, ip=${req.IP}, len=${req.ContentLength}
-    Headers: ${HttpContext.stringHeaders(req.Headers)}
-    Body: ${reqBody}`);
-
-      const resp = this.generated.Response;
-      const respBody = new TextDecoder().decode(resp.Body);
-      console.log(`Response code=${resp.StatusCode}
-    Headers: ${HttpContext.stringHeaders(resp.Headers)}
-    Body: ${respBody}`);
+    return this.runtimeContext;
   }
 }

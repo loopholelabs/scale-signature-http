@@ -43,13 +43,13 @@ dependencies = [
 
 [[package]]
 name = "scale_signature"
-version = "0.1.8"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f8675bce8d317cb7bc738e9270976473fcea274c3fc50b008b160e6b25dd2c7"
+checksum = "35d282d8dca75b1d5868e36e723628951fefde28f68bbd72e12b50ebe60dfdce"
 
 [[package]]
 name = "scale_signature_http"
-version = "0.1.6"
+version = "0.1.5"
 dependencies = [
  "lazy_static",
  "polyglot_rs",
