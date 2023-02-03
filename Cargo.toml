@@ -18,7 +18,6 @@ path = "lib.rs"
 [dependencies]
 polyglot_rs = "0.6.0"
 scale_signature = "0.2.1"
-lazy_static = "1.4.0"
 
 [profile.release]
 opt-level = 3
