@@ -77,7 +77,7 @@ export class HttpContext {
   }
 }
 
-export class StringList {
+export class HttpStringList {
   constructor(Value: string[]) {
     this._Value = Value
   }
@@ -103,7 +103,7 @@ export class StringList {
 
   static decode(buf: Uint8Array): {
     buf: Uint8Array,
-    value: StringList
+    value: HttpStringList
   } {
     let decoded = buf
     const ValueArray = decodeArray(decoded)
@@ -120,13 +120,13 @@ export class StringList {
 
     return {
       buf: decoded,
-      value: new StringList(Value.value)
+      value: new HttpStringList(Value.value)
     }
   }
 }
 
 export class HttpRequest {
-  constructor(Method: string, URI: string, ContentLength: bigint, Protocol: string, IP: string, Body: Uint8Array, Headers: Map<string, StringList>) {
+  constructor(Method: string, URI: string, ContentLength: bigint, Protocol: string, IP: string, Body: Uint8Array, Headers: Map<string, HttpStringList>) {
     this._Method = Method
     this._URI = URI
     this._ContentLength = ContentLength
@@ -186,13 +186,13 @@ export class HttpRequest {
     this._Body = Body
   }
 
-  private _Headers: Map<string, StringList>;
+  private _Headers: Map<string, HttpStringList>;
 
-  get Headers(): Map<string, StringList> {
+  get Headers(): Map<string, HttpStringList> {
     return this._Headers
   }
 
-  set Headers(Headers: Map<string, StringList>) {
+  set Headers(Headers: Map<string, HttpStringList>) {
     this._Headers = Headers
   }
 
@@ -242,14 +242,14 @@ export class HttpRequest {
     decoded = Body.buf
     const HeadersMap = decodeMap(decoded)
     decoded = HeadersMap.buf
-    const Headers: { value: Map<string, StringList> } = {
-      value: new Map<string, StringList>(),
+    const Headers: { value: Map<string, HttpStringList> } = {
+      value: new Map<string, HttpStringList>(),
     }
 
     for (let i = 0; i < HeadersMap.size; i++) {
       const key = decodeString(decoded);
       decoded = key.buf;
-      const value = StringList.decode(decoded);
+      const value = HttpStringList.decode(decoded);
       decoded = value.buf;
       Headers.value.set(key.value, value.value);
     }
@@ -262,7 +262,7 @@ export class HttpRequest {
 }
 
 export class HttpResponse {
-  constructor(StatusCode: number, Body: Uint8Array, Headers: Map<string, StringList>) {
+  constructor(StatusCode: number, Body: Uint8Array, Headers: Map<string, HttpStringList>) {
     this._StatusCode = StatusCode
     this._Body = Body
     this._Headers = Headers
@@ -288,13 +288,13 @@ export class HttpResponse {
     this._Body = Body
   }
 
-  private _Headers: Map<string, StringList>;
+  private _Headers: Map<string, HttpStringList>;
 
-  get Headers(): Map<string, StringList> {
+  get Headers(): Map<string, HttpStringList> {
     return this._Headers
   }
 
-  set Headers(Headers: Map<string, StringList>) {
+  set Headers(Headers: Map<string, HttpStringList>) {
     this._Headers = Headers
   }
 
@@ -322,14 +322,14 @@ export class HttpResponse {
     decoded = Body.buf
     const HeadersMap = decodeMap(decoded)
     decoded = HeadersMap.buf
-    const Headers: { value: Map<string, StringList> } = {
-      value: new Map<string, StringList>(),
+    const Headers: { value: Map<string, HttpStringList> } = {
+      value: new Map<string, HttpStringList>(),
     }
 
     for (let i = 0; i < HeadersMap.size; i++) {
       const key = decodeString(decoded);
       decoded = key.buf;
-      const value = StringList.decode(decoded);
+      const value = HttpStringList.decode(decoded);
       decoded = value.buf;
       Headers.value.set(key.value, value.value);
     }

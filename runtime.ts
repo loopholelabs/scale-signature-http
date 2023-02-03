@@ -16,7 +16,7 @@
 
 /* eslint no-bitwise: off */
 
-import {HttpContext, HttpRequest, HttpResponse, StringList} from "./http.signature";
+import {HttpContext, HttpRequest, HttpResponse, HttpStringList} from "./http.signature";
 
 import {RuntimeContext as RuntimeContextInterface, Signature} from "@loopholelabs/scale-signature";
 
@@ -32,7 +32,7 @@ export class Context extends HttpContext implements Signature {
     private readonly runtimeContext: RuntimeContext;
 
    constructor() {
-        super(new HttpRequest("", "", BigInt(0), "", "", EmptyBytes, new Map<string, StringList>()), new HttpResponse(0, EmptyBytes, new Map<string, StringList>()));
+        super(new HttpRequest("", "", BigInt(0), "", "", EmptyBytes, new Map<string, HttpStringList>()), new HttpResponse(0, EmptyBytes, new Map<string, HttpStringList>()));
         this.runtimeContext = new RuntimeContext(this);
    }
 

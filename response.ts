@@ -14,7 +14,7 @@
   limitations under the License.
 */
 
-import {HttpResponse as HttpContextResponse, StringList} from "./http.signature";
+import {HttpResponse as HttpContextResponse, HttpStringList} from "./http.signature";
 
 export class Response {
   private response: HttpContextResponse;
@@ -43,15 +43,15 @@ export class Response {
     this.response.Body = body;
   }
 
-  public Headers() : Map<string, StringList> {
+  public Headers() : Map<string, HttpStringList> {
     return this.response.Headers;
   }
 
-  public SetHeader(key : string, value : StringList) {
+  public SetHeader(key : string, value : HttpStringList) {
     this.response.Headers.set(key, value);
   }
 
-  public GetHeader(key : string) : StringList | undefined {
+  public GetHeader(key : string) : HttpStringList | undefined {
     return this.response.Headers.get(key);
   }
 }
