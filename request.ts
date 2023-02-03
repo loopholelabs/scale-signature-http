@@ -15,7 +15,7 @@
 */
 
 
-import {HttpRequest as HttpContextRequest, StringList} from "./http.signature";
+import {HttpRequest as HttpContextRequest, HttpStringList} from "./http.signature";
 
 export class Request {
   private request: HttpContextRequest;
@@ -65,15 +65,15 @@ export class Request {
     return this.request.Protocol;
   }
 
-  public Headers() : Map<string, StringList> {
+  public Headers() : Map<string, HttpStringList> {
     return this.request.Headers;
   }
 
-  public SetHeader(key : string, value : StringList) {
+  public SetHeader(key : string, value : HttpStringList) {
     this.request.Headers.set(key, value);
   }
 
-  public GetHeader(key : string) : StringList | undefined {
+  public GetHeader(key : string) : HttpStringList | undefined {
     return this.request.Headers.get(key);
   }
 }

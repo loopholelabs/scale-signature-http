@@ -7,6 +7,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [v0.2.4] - 2023-02-03
+
+### Changes
+
+- Removing `wee_alloc` because it's unmaintained
+- Adding release profile to the Rust build
+- Bumping `scale-signature` to `v0.2.1`
+
 ## [v0.2.3] - 2023-01-02
 
 ### Changes
@@ -27,7 +35,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Initial release of the Scale HTTP Signature library.
 
-[unreleased]: https://github.com/loopholelabs/scale-signature-http/compare/v0.2.3...HEAD
+[unreleased]: https://github.com/loopholelabs/scale-signature-http/compare/v0.2.4...HEAD
+[v0.2.4]: https://github.com/loopholelabs/scale-signature-http/compare/v0.2.4
 [v0.2.3]: https://github.com/loopholelabs/scale-signature-http/compare/v0.2.3
 [v0.1.1]: https://github.com/loopholelabs/scale-signature-http/compare/v0.1.1
 [v0.1.0]: https://github.com/loopholelabs/scale-signature-http/compare/v0.1.0
