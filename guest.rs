@@ -1,19 +1,19 @@
 #![cfg(target_arch = "wasm32")]
 
 /*
-	Copyright 2022 Loophole Labs
+    Copyright 2022 Loophole Labs
 
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-		   http://www.apache.org/licenses/LICENSE-2.0
+           http://www.apache.org/licenses/LICENSE-2.0
 
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 use crate::context::Context;
@@ -37,7 +37,7 @@ impl ContextTrait for Context {
 impl GuestContextTrait for GuestContext {
     unsafe fn to_write_buffer(&mut self) -> (u32, u32) {
         let mut cursor = Cursor::new(Vec::new());
-        cursor = match HttpContext::encode(self.generated.clone(), &mut cursor) {
+        cursor = match HttpContext::encode(&self.generated, &mut cursor) {
             Ok(_) => cursor,
             Err(err) => return self.error_write_buffer(err),
         };
@@ -52,7 +52,7 @@ impl GuestContextTrait for GuestContext {
 
     unsafe fn error_write_buffer(&mut self, error: Box<dyn std::error::Error>) -> (u32, u32) {
         let mut cursor = Cursor::new(Vec::new());
-        Encode::internal_error(self.generated.clone(), &mut cursor, error);
+        Encode::internal_error(&self.generated, &mut cursor, error);
 
         let vec = cursor.into_inner();
 
@@ -71,7 +71,7 @@ impl GuestContextTrait for GuestContext {
                 None
             }
             Err(e) => {
-               Some(e)
+                Some(e)
             },
         };
     }

@@ -19,8 +19,8 @@ use std::collections::HashMap;
 use std::io::Cursor;
 
 pub trait Encode {
-    fn encode(self, b: &mut Cursor<Vec<u8>>) -> Result<&mut Cursor<Vec<u8>>, Box<dyn std::error::Error>>;
-    fn internal_error(self, b: &mut Cursor<Vec<u8>>, error: Box<dyn std::error::Error>);
+    fn encode<'a>(&'a self, b: &'a mut Cursor<Vec<u8>>) -> Result<&mut Cursor<Vec<u8>>, Box<dyn std::error::Error>>;
+    fn internal_error<'a>(&'a self, b: &'a mut Cursor<Vec<u8>>, error: Box<dyn std::error::Error>);
 }
 
 pub trait Decode {
@@ -36,13 +36,13 @@ pub struct HttpContext {
 }
 
 impl Encode for HttpContext {
-    fn encode(self, b: &mut Cursor<Vec<u8>>) -> Result<&mut Cursor<Vec<u8>>, Box<dyn std::error::Error>> {
+    fn encode<'a>(&'a self, b: &'a mut Cursor<Vec<u8>>) -> Result<&mut Cursor<Vec<u8>>, Box<dyn std::error::Error>> {
         self.request.encode(b)?;
         self.response.encode(b)?;
         Ok(b)
     }
 
-    fn internal_error(self, b: &mut Cursor<Vec<u8>>, error: Box<dyn std::error::Error>) {
+    fn internal_error<'a>(&'a self, b: &'a mut Cursor<Vec<u8>>, error: Box<dyn std::error::Error>) {
         b.encode_error(error).unwrap();
     }
 }
@@ -78,7 +78,7 @@ pub struct HttpRequest {
 }
 
 impl Encode for HttpRequest {
-    fn encode(self, b: &mut Cursor<Vec<u8>>) -> Result<&mut Cursor<Vec<u8>>, Box<dyn std::error::Error>> {
+    fn encode<'a>(&'a self, b: &'a mut Cursor<Vec<u8>>) -> Result<&mut Cursor<Vec<u8>>, Box<dyn std::error::Error>> {
         b.encode_string(&*self.uri)?
             .encode_string(&*self.method)?
             .encode_i64(self.content_length)?
@@ -87,14 +87,14 @@ impl Encode for HttpRequest {
             .encode_bytes(&self.body)?;
 
         b.encode_map(self.headers.len(), Kind::String, Kind::Any)?;
-        for (k, v) in self.headers {
+        for (k, v) in &self.headers {
             b.encode_string(&*k)?;
             v.encode(b)?;
         }
         Ok(b)
     }
 
-    fn internal_error(self, b: &mut Cursor<Vec<u8>>, error: Box<dyn std::error::Error>) {
+    fn internal_error<'a>(&'a self, b: &'a mut Cursor<Vec<u8>>, error: Box<dyn std::error::Error>) {
         b.encode_error(error).unwrap();
     }
 }
@@ -150,18 +150,18 @@ pub struct HttpResponse {
 }
 
 impl Encode for HttpResponse {
-    fn encode(self, b: &mut Cursor<Vec<u8>>) -> Result<&mut Cursor<Vec<u8>>, Box<dyn std::error::Error>> {
+    fn encode<'a>(&'a self, b: &'a mut Cursor<Vec<u8>>) -> Result<&mut Cursor<Vec<u8>>, Box<dyn std::error::Error>> {
         b.encode_i32(self.status_code)?.encode_bytes(&self.body)?;
 
         b.encode_map(self.headers.len(), Kind::String, Kind::Any)?;
-        for (k, v) in self.headers {
+        for (k, v) in &self.headers {
             b.encode_string(&*k)?;
             v.encode(b)?;
         }
         Ok(b)
     }
 
-    fn internal_error(self, b: &mut Cursor<Vec<u8>>, error: Box<dyn std::error::Error>) {
+    fn internal_error<'a>(&'a self, b: &'a mut Cursor<Vec<u8>>, error: Box<dyn std::error::Error>) {
         b.encode_error(error).unwrap();
     }
 }
@@ -211,15 +211,15 @@ pub struct HttpStringList {
 }
 
 impl Encode for HttpStringList {
-    fn encode(self, b: &mut Cursor<Vec<u8>>) -> Result<&mut Cursor<Vec<u8>>, Box<dyn std::error::Error>> {
+    fn encode<'a>(&'a self, b: &'a mut Cursor<Vec<u8>>) -> Result<&mut Cursor<Vec<u8>>, Box<dyn std::error::Error>> {
         b.encode_array(self.value.len(), Kind::String)?;
-        for item in self.value {
+        for item in &self.value {
             b.encode_string(&*item)?;
         }
         Ok(b)
     }
 
-    fn internal_error(self, b: &mut Cursor<Vec<u8>>, error: Box<dyn std::error::Error>) {
+    fn internal_error<'a>(&'a self, b: &'a mut Cursor<Vec<u8>>, error: Box<dyn std::error::Error>) {
         b.encode_error(error).unwrap();
     }
 }
