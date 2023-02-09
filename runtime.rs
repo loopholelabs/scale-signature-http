@@ -44,13 +44,13 @@ impl RuntimeContextTrait for RuntimeContext {
 
     fn write(&self) -> Vec<u8> {
         let mut cursor = Cursor::new(Vec::new());
-        let _ = Encode::encode(self.clone(), &mut cursor);
+        let _ = Encode::encode(self, &mut cursor);
         cursor.into_inner()
     }
 
     fn error(&self, error: Box<dyn std::error::Error>) -> Vec<u8> {
         let mut cursor = Cursor::new(Vec::new());
-        Encode::internal_error(self.clone(), &mut cursor, error);
+        Encode::internal_error(self, &mut cursor, error);
         cursor.into_inner()
     }
 }
