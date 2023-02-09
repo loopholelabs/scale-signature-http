@@ -49,7 +49,7 @@ export class GuestContext implements GuestContextInterface {
 //
 // It assumes that the readBuffer has been filled with the data from the Scale Runtime after
 // a call to the Resize method
-  public FromReadBuffer() {
+  public FromReadBuffer(): Error | undefined {
     let ret = HttpContext.decode(new Uint8Array(readBuffer));
     this._context = ret.value;
     return undefined;
