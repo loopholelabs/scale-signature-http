@@ -2,19 +2,19 @@
 // source: signature.proto
 
 /*
-	Copyright 2022 Loophole Labs
+    Copyright 2022 Loophole Labs
 
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-		   http://www.apache.org/licenses/LICENSE-2.0
+           http://www.apache.org/licenses/LICENSE-2.0
 
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 use polyglot_rs::{Decoder, DecodingError, Encoder, Kind};
@@ -22,14 +22,17 @@ use std::collections::HashMap;
 use std::io::Cursor;
 
 pub trait Encode {
-    fn encode<'a>(&'a self, b: &'a mut Cursor<Vec<u8>>) -> Result<&mut Cursor<Vec<u8>>, Box<dyn std::error::Error>>;
+    fn encode<'a>(
+        &'a self,
+        b: &'a mut Cursor<Vec<u8>>,
+    ) -> Result<&mut Cursor<Vec<u8>>, Box<dyn std::error::Error>>;
     fn internal_error<'a>(&'a self, b: &'a mut Cursor<Vec<u8>>, error: Box<dyn std::error::Error>);
 }
 
 pub trait Decode {
     fn decode(b: &mut Cursor<&mut Vec<u8>>) -> Result<Option<Self>, Box<dyn std::error::Error>>
-        where
-            Self: Sized;
+    where
+        Self: Sized;
 }
 
 pub struct HttpContext {
