@@ -7,6 +7,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [v0.2.5] - 2023-02-09
+
+### Changes
+
+- Bumping `polyglot_rs` to `v0.6.1` and using it to regenerate the Rust code
+- Removing need for clones in the encoding/decoding of the HTTP Signature
+
 ## [v0.2.4] - 2023-02-03
 
 ### Changes
@@ -35,7 +42,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Initial release of the Scale HTTP Signature library.
 
-[unreleased]: https://github.com/loopholelabs/scale-signature-http/compare/v0.2.4...HEAD
+[unreleased]: https://github.com/loopholelabs/scale-signature-http/compare/v0.2.5...HEAD
+[v0.2.5]: https://github.com/loopholelabs/scale-signature-http/compare/v0.2.5
 [v0.2.4]: https://github.com/loopholelabs/scale-signature-http/compare/v0.2.4
 [v0.2.3]: https://github.com/loopholelabs/scale-signature-http/compare/v0.2.3
 [v0.1.1]: https://github.com/loopholelabs/scale-signature-http/compare/v0.1.1
