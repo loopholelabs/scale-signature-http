@@ -94,7 +94,7 @@ export class GuestContext implements GuestContextInterface {
   public Resize(size: number): number {
     readBuffer = new Uint8Array(size).buffer;
     let addrof = (global as any)[SCALE_ADDRESS_OF];
-    let ptr = addrof(writeBuffer);
+    let ptr = addrof(readBuffer);
     return ptr;
   }
 }
