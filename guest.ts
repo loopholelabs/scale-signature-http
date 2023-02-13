@@ -91,10 +91,11 @@ export class GuestContext implements GuestContextInterface {
     return new Response(this._context.Response);
   }
 
-  public Resize(size: number): number {
+}
+
+export function Resize(size: number): number {
     readBuffer = new Uint8Array(size).buffer;
     let addrof = (global as any)[SCALE_ADDRESS_OF];
     let ptr = addrof(readBuffer);
     return ptr;
-  }
 }
