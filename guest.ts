@@ -11,20 +11,20 @@
 	limitations under the License.
 */
 
-import { GuestContext as GuestContextInterface } from "@loopholelabs/scale-signature";
-import { encodeError } from "@loopholelabs/polyglot-ts";
+import {GuestContext as GuestContextInterface} from "@loopholelabs/scale-signature";
+import {encodeError} from "@loopholelabs/polyglot-ts";
 
-import { Request } from "./request";
-import { Response } from "./response";
+import {Request} from "./request";
+import {Response} from "./response";
 
-import { HttpContext, HttpRequest, HttpResponse } from "./http.signature";
+import {HttpContext} from "./http.signature";
 
 // TODO: These maybe should move to scale-signature
 const SCALE_NEXT: string = "scale_fn_next";
 const SCALE_ADDRESS_OF: string = "getaddr";
 
-var writeBuffer: ArrayBuffer = new Uint8Array().buffer;
-var readBuffer: ArrayBuffer = new Uint8Array().buffer;
+let writeBuffer: ArrayBuffer = new Uint8Array().buffer;
+let readBuffer: ArrayBuffer = new Uint8Array().buffer;
 
 export class GuestContext implements GuestContextInterface {
   private _context: HttpContext;
@@ -96,6 +96,5 @@ export class GuestContext implements GuestContextInterface {
 export function Resize(size: number): number {
     readBuffer = new Uint8Array(size).buffer;
     let addrof = (global as any)[SCALE_ADDRESS_OF];
-    let ptr = addrof(readBuffer);
-    return ptr;
+    return addrof(readBuffer);
 }
