@@ -1,7 +1,7 @@
 {
   "name": "@loopholelabs/scale-signature-http",
-  "version": "0.3.1",
-  "description": "TypeScript version of the scale-signature-http.",
+  "version": "0.3.2",
+  "description": "TypeScript version of the Scale HTTP Signature",
   "source": "index.ts",
   "main": "dist/main.js",
   "module": "dist/module.js",
@@ -9,6 +9,9 @@
   "scripts": {
     "build": "parcel build"
   },
+  "files": [
+    "dist"
+  ],
   "targets": {
     "default": {
       "distDir": "./dist"
