@@ -1,6 +1,6 @@
 [package]
 name = "scale_signature_http"
-version = "0.3.0"
+version = "0.3.1"
 edition = "2021"
 description = "default http signature for Scale Runtime"
 license = "Apache-2.0"
@@ -17,7 +17,7 @@ path = "lib.rs"
 
 [dependencies]
 polyglot_rs = "0.6.1"
-scale_signature = "0.2.2"
+scale_signature = "0.2.3"
 
 [profile.release]
 opt-level = 3
