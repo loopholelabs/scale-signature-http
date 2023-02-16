@@ -4,13 +4,15 @@ version = "0.3.2"
 edition = "2021"
 description = "default http signature for Scale Runtime"
 license = "Apache-2.0"
+homepage = "https://scale.sh"
 repository = "https://github.com/loopholelabs/scale-signature-http"
 exclude = [
     "**/*.go",
     "**/*.templ",
-    "**/*.ts",
     "go.mod",
     "go.sum",
+    "*.ts",
+    "*.js",
     "*.json",
     "*.proto",
     ".parcelrc",

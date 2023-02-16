@@ -1,8 +1,12 @@
 # Scale HTTP Signature
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Tests](https://github.com/loopholelabs/scale-signature-http/actions/workflows/test.yml/badge.svg)](https://github.com/loopholelabs/scale-signature-http/actions/workflows/test.yml)
 [![Discord](https://dcbadge.vercel.app/api/server/JYmFhtdPeu?style=flat)](https://loopholelabs.io/discord)
+
+[![Golang](https://github.com/loopholelabs/scale-signature-http/actions/workflows/golang.yml/badge.svg)](https://github.com/loopholelabs/scale-signature-http/actions/workflows/golang.yml)
+[![Rust](https://github.com/loopholelabs/scale-signature-http/actions/workflows/rust.yml/badge.svg)](https://github.com/loopholelabs/scale-signature-http/actions/workflows/rust.yml)
+[![Typescript](https://github.com/loopholelabs/scale-signature-http/actions/workflows/typescript.yml/badge.svg)](https://github.com/loopholelabs/scale-signature-http/actions/workflows/typescript.yml)
+
 
 This library contains the definitions and source for the official Scale HTTP Signature for [Scale Functions](https://scale.sh).
 
