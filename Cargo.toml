@@ -1,15 +1,21 @@
 [package]
 name = "scale_signature_http"
-version = "0.3.1"
+version = "0.3.2"
 edition = "2021"
 description = "default http signature for Scale Runtime"
 license = "Apache-2.0"
+homepage = "https://scale.sh"
 repository = "https://github.com/loopholelabs/scale-signature-http"
 exclude = [
     "**/*.go",
     "**/*.templ",
     "go.mod",
     "go.sum",
+    "*.ts",
+    "*.js",
+    "*.json",
+    "*.proto",
+    ".parcelrc",
 ]
 
 [lib]
@@ -17,7 +23,7 @@ path = "lib.rs"
 
 [dependencies]
 polyglot_rs = "0.6.1"
-scale_signature = "0.2.3"
+scale_signature = "0.2.7"
 
 [profile.release]
 opt-level = 3
