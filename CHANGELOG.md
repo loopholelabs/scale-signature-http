@@ -14,6 +14,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Updating `package.json` dependencies to latest versions
 - Updating `Cargo.toml` to only package relevant build artifacts
 - Updating `package.json` to only package relevant build artifacts
+- Bumping `scale-signature` to `v0.2.7`
 
 ## [v0.3.1] - 2023-02-16
 

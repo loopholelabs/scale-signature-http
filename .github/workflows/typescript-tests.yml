@@ -22,8 +22,3 @@ jobs:
         run: npm install --legacy-peer-deps
       - name: Build with npm
         run: npm run build
-      - name: Publish to npm
-        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
