@@ -27,10 +27,9 @@ let writeBuffer: ArrayBuffer = new Uint8Array().buffer;
 let readBuffer: ArrayBuffer = new Uint8Array().buffer;
 
 export class GuestContext implements GuestContextInterface {
-  private _context: HttpContext;
+  private _context: HttpContext | undefined;
 
-  constructor(ctx: HttpContext) {
-    this._context = ctx;
+  constructor() {
   }
 
 // ToWriteBuffer serializes the Context into the global writeBuffer and returns the pointer to the buffer and its size
@@ -38,6 +37,9 @@ export class GuestContext implements GuestContextInterface {
 // This method should only be used to read the Context from the Scale Runtime.
 // Users should not use this method.
   public ToWriteBuffer(): number[] {
+    if (this._context == undefined) {
+      throw new Error("Context has not been set when ToWriteBuffer called");
+    }
     writeBuffer = this._context.encode(new Uint8Array()).buffer;
     let addrof = (global as any)[SCALE_ADDRESS_OF];
     let ptr = addrof(writeBuffer);
@@ -83,11 +85,17 @@ export class GuestContext implements GuestContextInterface {
 
 // Request returns the Request object for the Context
   get Request(): Request {
+    if (this._context==undefined) {
+      throw new Error("Context has not been set when Request called");
+    }
     return new Request(this._context.Request);
   }
 
 // Response returns the Response object for the Context
   get Response(): Response {
+    if (this._context==undefined) {
+      throw new Error("Context has not been set when Response called");
+    }
     return new Response(this._context.Response);
   }
 
