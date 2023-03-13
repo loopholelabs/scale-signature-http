@@ -3,6 +3,7 @@ name: Typescript
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   publish:
@@ -26,6 +27,6 @@ jobs:
         run: npm run build
       - name: Publish to npm
         run: npm publish --access public
+        working-directory: ./dist
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-
