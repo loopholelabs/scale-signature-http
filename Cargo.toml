@@ -1,6 +1,6 @@
 [package]
 name = "scale_signature_http"
-version = "0.3.5"
+version = "0.3.6"
 edition = "2021"
 description = "The definitions and source for the official Scale HTTP Signature for Scale Functions"
 license = "Apache-2.0"
