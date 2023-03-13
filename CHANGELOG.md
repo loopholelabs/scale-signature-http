@@ -7,6 +7,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [v0.3.7] - 2023-03-12
+
+### Changes
+
+- Bumping `scale-signature` to `v0.2.11`
+- Bumping `scalefile` to `v0.1.9`
+
 ## [v0.3.6] - 2023-03-12
 
 ### Changes
