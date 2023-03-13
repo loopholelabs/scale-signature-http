@@ -15,7 +15,6 @@ exclude = [
     "*.js",
     "*.json",
     "*.proto",
-    ".parcelrc",
 ]
 
 [lib]
@@ -23,7 +22,7 @@ path = "lib.rs"
 
 [dependencies]
 polyglot_rs = "0.6.1"
-scale_signature = "0.2.9"
+scale_signature = "0.2.10"
 
 [profile.release]
 opt-level = 3
