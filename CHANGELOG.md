@@ -7,12 +7,18 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [v0.3.5] - 2023-03-12
+## [v0.3.6] - 2023-03-12
 
 ### Changes
 
 - Bumping `scale-signature` to `v0.2.10`
 - Bumping `scalefile` to `v0.1.8`
+
+## [v0.3.5] - 2023-03-10
+
+### Changes
+
+- Updated `ts` guest to allow for generic constructor
 
 ## [v0.3.4] - 2023-02-17
 
@@ -87,7 +93,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Initial release of the Scale HTTP Signature library.
 
-[unreleased]: https://github.com/loopholelabs/scale-signature-http/compare/v0.3.5...HEAD
+[unreleased]: https://github.com/loopholelabs/scale-signature-http/compare/v0.3.6...HEAD
+[v0.3.6]: https://github.com/loopholelabs/scale-signature-http/compare/v0.3.6
 [v0.3.5]: https://github.com/loopholelabs/scale-signature-http/compare/v0.3.5
 [v0.3.4]: https://github.com/loopholelabs/scale-signature-http/compare/v0.3.4
 [v0.3.3]: https://github.com/loopholelabs/scale-signature-http/compare/v0.3.3
