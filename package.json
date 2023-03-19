@@ -1,6 +1,6 @@
 {
   "name": "@loopholelabs/scale-signature-http",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "The definitions and source for the official Scale HTTP Signature for Scale Functions",
   "license": "apache-2.0",
   "source": "index.ts",
