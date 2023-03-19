@@ -208,8 +208,8 @@ export class HttpRequest {
 
   encode(buf: Uint8Array): Uint8Array {
     let encoded = buf
-    encoded = encodeString(encoded, this._Method)
     encoded = encodeString(encoded, this._URI)
+    encoded = encodeString(encoded, this._Method)
     encoded = encodeInt64(encoded, this._ContentLength)
     encoded = encodeString(encoded, this._Protocol)
     encoded = encodeString(encoded, this._IP)
@@ -228,10 +228,10 @@ export class HttpRequest {
     value: HttpRequest
   } {
     let decoded = buf
-    const Method = decodeString(decoded)
-    decoded = Method.buf
     const URI = decodeString(decoded)
     decoded = URI.buf
+    const Method = decodeString(decoded)
+    decoded = Method.buf
     const ContentLength = decodeInt64(decoded)
     decoded = ContentLength.buf
     const Protocol = decodeString(decoded)
